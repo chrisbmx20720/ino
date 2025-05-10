@@ -3,38 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Calculadora de Pulmón</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="/css/style.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0;
     }
+
     .container {
       background: white;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       max-width: 400px;
-      width: 100%;
+      width: 90%;
+      margin: 50px auto;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 1rem;
     }
+
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: bold;
     }
+
     input {
       width: 100%;
       padding: 0.5rem;
       font-size: 1rem;
       margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
+
     button {
       width: 100%;
       padding: 0.75rem;
@@ -45,9 +54,11 @@
       cursor: pointer;
       border-radius: 5px;
     }
+
     button:hover {
       background: #0056b3;
     }
+
     .result {
       margin-top: 1rem;
       font-size: 1.1rem;
@@ -55,20 +66,19 @@
       font-weight: bold;
     }
   </style>
-
-   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-     <nav class="menu">
+  <nav class="menu">
     <ul>
-      <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
+      <li><a href="neutralizado.html">Neutralizado</a></li>
       <li><a href="desgomado.html">Desgomado</a></li>
       <li><a href="ad5.html">AD5</a></li>
-      <li><a href="pulmon.html">Pulmón</a></li>
+      <li><a href="pulmon.html" class="active">Pulmón</a></li>
       <li><a href="blanqueo.html">Blanqueo</a></li>
     </ul>
   </nav>
+
   <div class="container">
     <h2>Calculadora de Pulmón</h2>
     <label for="luz">Introduce la Luz (cm):</label>
@@ -85,7 +95,7 @@
         return;
       }
 
-      const contenido = 183.6- luz;
+      const contenido = 183.6 - luz;
       const masa = (contenido * 19.34) + 383.6;
 
       document.getElementById('resultado').textContent = `Masa total: ${masa.toFixed(2)} kg`;

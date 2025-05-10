@@ -9,6 +9,42 @@
       font-family: Arial, sans-serif;
       padding: 20px;
       background-color: #f2f2f2;
+      margin: 0;
+    }
+
+    nav.menu {
+      width: 100%;
+      background-color: #1e1e2f;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+
+    nav.menu ul {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+    }
+
+    nav.menu li {
+      flex: 1 1 auto;
+    }
+
+    nav.menu a {
+      display: block;
+      padding: 15px;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    nav.menu a:hover,
+    nav.menu a.active {
+      background-color: #3e8ed0;
     }
 
     h2 {
@@ -63,6 +99,17 @@
   </style>
 </head>
 <body>
+
+  <nav class="menu">
+    <ul>
+      <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
+      <li><a href="desgomado.html">Desgomado</a></li>
+      <li><a href="ad5.html">AD5</a></li>
+      <li><a href="pulmon.html">Pulmón</a></li>
+      <li><a href="blanqueo.html">Blanqueo</a></li>
+    </ul>
+  </nav>
+
   <h2>Calculadora de Neutralizado</h2>
 
   <div class="form-group">
@@ -104,7 +151,7 @@
 
       const aceiteConsumido = mm1Final - mm1Inicial;
       const aceiteProducido = aceiteConsumido * 0.98;
-      const acidoFosforico = (aceiteConsumido * dosificacion/100);
+      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
 
       const resultados = `
         <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
@@ -115,5 +162,6 @@
       document.getElementById("resultados").innerHTML = resultados;
     }
   </script>
+
 </body>
 </html>
