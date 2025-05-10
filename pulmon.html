@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Calculadora de Pulmón</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
@@ -80,25 +80,41 @@
   </nav>
 
   <div class="container">
-    <h2>Calculadora de Pulmón</h2>
+    <h2>Calculadora Fludificada</h2>
+
     <label for="luz">Introduce la Luz (cm):</label>
     <input type="number" id="luz" placeholder="Ej. 40">
-    <button onclick="calcular()">Calcular Masa (kg)</button>
-    <div class="result" id="resultado"></div>
+
+    <label for="acidoGraso">Ácido Graso (kg):</label>
+    <input type="number" id="acidoGraso" placeholder="Ej. 300">
+
+    <label for="rbd">RBD (kg):</label>
+    <input type="number" id="rbd" placeholder="Ej. 400">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="result" id="resultadoConsumido"></div>
+    <div class="result" id="resultadoProducido"></div>
   </div>
 
   <script>
     function calcular() {
       const luz = parseFloat(document.getElementById('luz').value);
+      const acidoGraso = parseFloat(document.getElementById('acidoGraso').value) || 0;
+      const rbd = parseFloat(document.getElementById('rbd').value) || 0;
+
       if (isNaN(luz) || luz < 0 || luz > 154) {
-        document.getElementById('resultado').textContent = "Introduce un valor válido de luz (0 a 154 cm)";
+        document.getElementById('resultadoConsumido').textContent = "Introduce un valor válido de luz (0 a 154 cm)";
+        document.getElementById('resultadoProducido').textContent = "";
         return;
       }
 
       const contenido = 183.6 - luz;
-      const masa = (contenido * 19.34) + 383.6;
+      const masa = (contenido * 19.34) + 383.6; // Sin fludificar consumido
+      const producido = Math.min(masa + acidoGraso + rbd, 3600); // Con límite de 3600
 
-      document.getElementById('resultado').textContent = `Masa total: ${masa.toFixed(2)} kg`;
+      document.getElementById('resultadoConsumido').textContent = `Sin fludificar consumido: ${masa.toFixed(2)} kg`;
+      document.getElementById('resultadoProducido').textContent = `Producido: ${producido.toFixed(2)} kg`;
     }
   </script>
 </body>
