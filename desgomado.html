@@ -2,22 +2,60 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Desgomado</title>
-  <link rel="stylesheet" href="/css/style.css">
-  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .input-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .input-pair {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      font-weight: bold;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .input-group {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Styling for the select to ensure it aligns well */
+    select {
+      padding: 8px;
+      font-size: 16px;
+    }
+
+  </style>
 </head>
 <body>
-
-  <nav class="menu">
-    <ul>
-      <li><a href="neutralizado.html">Neutralizado</a></li>
-      <li><a href="desgomado.html" class="active">Desgomado</a></li>
-      <li><a href="ad5.html">AD5</a></li>
-      <li><a href="pulmon.html">Pulmón</a></li>
-      <li><a href="blanqueo.html">Blanqueo</a></li>
-    </ul>
-  </nav>
 
   <h2>Formulario Desgomado</h2>
 
@@ -30,6 +68,7 @@
       <label for="mm3_final">MM3 Final:</label>
       <input type="number" id="mm3_final" step="any" />
     </div>
+
     <div class="input-pair">
       <label for="mm4_inicial">MM4 Inicial:</label>
       <input type="number" id="mm4_inicial" step="any" />
@@ -38,7 +77,8 @@
       <label for="mm4_final">MM4 Final:</label>
       <input type="number" id="mm4_final" step="any" />
     </div>
-    <div class="input-pair" style="flex: 1 1 100%;">
+
+    <div class="input-pair" style="grid-column: span 2;">
       <label for="dosificacion">Dosificación (%):</label>
       <select id="dosificacion">
         <option value="0.08">0.08%</option>
