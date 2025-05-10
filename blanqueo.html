@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Blanqueo</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin: 80px auto 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input[type="number"] {
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #007bff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .copiar {
+      cursor: pointer;
+      color: #007bff;
+      margin-left: 10px;
+    }
+
+    .copiar:hover {
+      text-decoration: underline;
+    }
+
+    .titulo {
+      display: block;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="menu">
+    <ul>
+      <li><a href="neutralizado.html">Neutralizado</a></li>
+      <li><a href="desgomado.html">Desgomado</a></li>
+      <li><a href="ad5.html">AD5</a></li>
+      <li><a href="pulmon.html">Pulmón</a></li>
+      <li><a href="blanqueo.html" class="active">Blanqueo</a></li>
+    </ul>
+  </nav>
+
+  <h3 class="titulo">Calculadora de Blanqueo</h3>
+  <div class="container">
+    <label for="mm-inicial">MM Inicial:</label>
+    <input type="number" id="mm-inicial" placeholder="Ingrese MM Inicial">
+    
+    <label for="mm-final">MM Final:</label>
+    <input type="number" id="mm-final" placeholder="Ingrese MM Final">
+    
+    <div class="resultado">
+      <span id="resultado">Resultado: 0</span>
+      <span class="copiar" onclick="copiarTexto()">📋</span>
+    </div>
+  </div>
+
+  <script>
+    const mmInicialInput = document.getElementById('mm-inicial');
+    const mmFinalInput = document.getElementById('mm-final');
+    const resultadoSpan = document.getElementById('resultado');
+
+    function calcularResultado() {
+      const mmInicial = parseFloat(mmInicialInput.value) || 0;
+      const mmFinal = parseFloat(mmFinalInput.value) || 0;
+      const diferencia = mmFinal - mmInicial;
+      const resultadoFinal = (diferencia * 0.99769).toFixed(2);
+      resultadoSpan.innerText = "Resultado: " + resultadoFinal;
+    }
+
+    mmInicialInput.addEventListener('input', calcularResultado);
+    mmFinalInput.addEventListener('input', calcularResultado);
+
+    function copiarTexto() {
+      const resultadoTexto = resultadoSpan.innerText.replace("Resultado: ", "");
+      navigator.clipboard.writeText(resultadoTexto).then(() => {
+        alert("Texto copiado: " + resultadoTexto);
+      }).catch(err => {
+        console.error('Error al copiar el texto: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
