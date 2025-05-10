@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Desgomado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .input-pair {
+      flex: 1 1 calc(50% - 10px);
+      min-width: 120px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    .resultado {
+      margin-top: 15px;
+      font-weight: bold;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    @media (min-width: 601px) {
+      .input-pair {
+        flex: 1 1 45%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Formulario Desgomado</h2>
+
+  <div class="input-group">
+    <div class="input-pair">
+      <label for="mm3_inicial">MM3 Inicial:</label>
+      <input type="number" id="mm3_inicial" step="any" />
+    </div>
+    <div class="input-pair">
+      <label for="mm3_final">MM3 Final:</label>
+      <input type="number" id="mm3_final" step="any" />
+    </div>
+
+    <div class="input-pair">
+      <label for="mm4_inicial">MM4 Inicial:</label>
+      <input type="number" id="mm4_inicial" step="any" />
+    </div>
+    <div class="input-pair">
+      <label for="mm4_final">MM4 Final:</label>
+      <input type="number" id="mm4_final" step="any" />
+    </div>
+
+    <div style="flex: 1 1 100%;">
+      <label for="dosificacion">Dosificación (%):</label>
+      <select id="dosificacion">
+        <option value="0.08">0.08%</option>
+        <option value="0.07">0.07%</option>
+        <option value="0.06">0.06%</option>
+        <option value="0.05">0.05%</option>
+        <option value="0.04">0.04%</option>
+        <option value="0.03">0.03%</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="resultado" id="resultadoConsumo">Consumo de Aceite: 0</div>
+  <div class="resultado" id="resultadoProduccion">Producción Desgomado: 0</div>
+  <div class="resultado" id="resultadoAcetico">Acético: 0</div>
+
+  <script>
+    const mm3_inicial = document.getElementById('mm3_inicial');
+    const mm3_final = document.getElementById('mm3_final');
+    const mm4_inicial = document.getElementById('mm4_inicial');
+    const mm4_final = document.getElementById('mm4_final');
+    const dosificacion = document.getElementById('dosificacion');
+
+    const resultadoConsumo = document.getElementById('resultadoConsumo');
+    const resultadoProduccion = document.getElementById('resultadoProduccion');
+    const resultadoAcetico = document.getElementById('resultadoAcetico');
+
+    [mm3_inicial, mm3_final, mm4_inicial, mm4_final, dosificacion].forEach(input => {
+      input.addEventListener('input', calcular);
+    });
+
+    function calcular() {
+      const mm3Ini = parseFloat(mm3_inicial.value) || 0;
+      const mm3Fin = parseFloat(mm3_final.value) || 0;
+      const mm4Ini = parseFloat(mm4_inicial.value) || 0;
+      const mm4Fin = parseFloat(mm4_final.value) || 0;
+      const dosif = parseFloat(dosificacion.value) || 0;
+
+      const consumo = mm3Fin - mm3Ini;
+      const produccion = mm4Fin - mm4Ini;
+      const acetico = consumo * (dosif / 100);
+
+      resultadoConsumo.textContent = `Consumo de Aceite: ${consumo.toFixed(2)}`;
+      resultadoProduccion.textContent = `Producción Desgomado: ${produccion.toFixed(2)}`;
+      resultadoAcetico.textContent = `Acético: ${acetico.toFixed(4)}`;
+    }
+  </script>
+
+</body>
+</html>
