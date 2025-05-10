@@ -1,43 +1,99 @@
+/* General */
 body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}
 
-    nav.menu {
-      width: 600px;
-      background-color: #1e1e2f;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      margin:0 auto;
-    }
+h2, h3 {
+  text-align: center;
+  margin-top: 80px;
+}
 
-    nav.menu ul {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      flex-wrap: wrap;
-    }
+/* Navegación */
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #007bff;
+  padding: 10px 0;
+  z-index: 1000;
+}
 
-    nav.menu li {
-      flex: 1 1 auto;
-    }
+.menu ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
 
-    nav.menu a {
-      display: block;
-      padding: 15px;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
+.menu li {
+  margin: 0 10px;
+}
 
-    nav.menu a:hover,
-    nav.menu a.active {
-      background-color: #3e8ed0;
-    }
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
 
-    .content {
-      padding: 20px;
-    }
+.menu a:hover,
+.menu a.active {
+  background-color: #0056b3;
+}
+
+/* Formulario */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.input-pair {
+  flex: 1 1 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+/* Resultados */
+.resultado {
+  max-width: 600px;
+  margin: 1rem auto;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive ajustado para pantallas medianas */
+@media (min-width: 600px) {
+  .input-pair {
+    flex: 1 1 calc(50% - 1rem);
+  }
+}
