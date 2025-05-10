@@ -6,8 +6,63 @@
   <title>Desgomado</title>
   <link rel="stylesheet" href="/css/style.css">
 
-  
-  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    /* Contenedor de los inputs con Grid */
+    .input-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+      gap: 15px; /* Espaciado entre las columnas */
+    }
+
+    .input-pair {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      font-weight: bold;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    /* Optimización para pantallas pequeñas (móviles) */
+    @media (max-width: 600px) {
+      .input-group {
+        grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+      }
+
+      .input-pair {
+        width: 100%;
+      }
+    }
+
+    /* Aseguramos que el select ocupe el ancho completo */
+    select {
+      padding: 8px;
+      font-size: 16px;
+    }
+
+  </style>
 </head>
 <body>
 
@@ -40,7 +95,8 @@
       <label for="mm4_final">MM4 Final:</label>
       <input type="number" id="mm4_final" step="any" />
     </div>
-    <div class="input-pair" style="flex: 1 1 100%;">
+
+    <div class="input-pair" style="grid-column: span 2;"> <!-- Ocupa ambas columnas -->
       <label for="dosificacion">Dosificación (%):</label>
       <select id="dosificacion">
         <option value="0.08">0.08%</option>
