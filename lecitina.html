@@ -100,8 +100,8 @@
     let cmInicial = luzInicial ? 367 - luzInicial : '';
     let cmFinal = luzFinal ? 367 - luzFinal : '';
 
-    let kgInicial = luzInicial ? (luzInicial * 43.68 + 1500) : '';
-    let kgFinal = luzFinal ? (luzFinal * 43.68 + 1500) : '';
+    let kgInicial = luzInicial ? (luzInicial * 43.68)+1500 : '';
+    let kgFinal = luzFinal ? (luzFinal * 43.68)+1500 : '';
 
     document.getElementById('cmInicial').value = cmInicial !== '' ? cmInicial.toFixed(2) : '';
     document.getElementById('kgInicial').value = kgInicial !== '' ? kgInicial.toFixed(2) : '';
