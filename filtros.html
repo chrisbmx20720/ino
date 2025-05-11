@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Filtros de Crudo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    th, td {
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .result {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .copy-btn {
+      display: block;
+      margin: 10px auto 0;
+      padding: 0.5rem 1rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Calculadora de Filtros de Crudo</h2>
+  <table>
+    <tr>
+      <th></th>
+      <th>MM Inicial</th>
+      <th>MM Final</th>
+    </tr>
+    <tr>
+      <td>Filtro 1</td>
+      <td><input type="number" id="mmInicial1" oninput="calcular()"></td>
+      <td><input type="number" id="mmFinal1" oninput="calcular()"></td>
+    </tr>
+    <tr>
+      <td>Filtro 2</td>
+      <td><input type="number" id="mmInicial2" oninput="calcular()"></td>
+      <td><input type="number" id="mmFinal2" oninput="calcular()"></td>
+    </tr>
+  </table>
+
+  <div class="result" id="resultado">
+    Diferencia Filtro 1: -<br>
+    Diferencia Filtro 2: -<br>
+    Producción Filtrado: -
+  </div>
+  <button class="copy-btn" onclick="copiarResultado()">Copiar Resultado</button>
+</div>
+
+<script>
+  function calcular() {
+    const mmInicial1 = parseFloat(document.getElementById('mmInicial1').value) || 0;
+    const mmFinal1 = parseFloat(document.getElementById('mmFinal1').value) || 0;
+    const mmInicial2 = parseFloat(document.getElementById('mmInicial2').value) || 0;
+    const mmFinal2 = parseFloat(document.getElementById('mmFinal2').value) || 0;
+
+    const diferencia1 = mmFinal1 - mmInicial1;
+    const diferencia2 = mmFinal2 - mmInicial2;
+    const total = diferencia1 + diferencia2;
+
+    const resultado = `
+      Diferencia Filtro 1: ${diferencia1.toFixed(2)}<br>
+      Diferencia Filtro 2: ${diferencia2.toFixed(2)}<br>
+      Producción Filtrado: ${total.toFixed(2)}
+    `;
+
+    document.getElementById('resultado').innerHTML = resultado;
+  }
+
+  function copiarResultado() {
+    const resultText = document.getElementById('resultado').innerText;
+    navigator.clipboard.writeText(resultText)
+      .then(() => alert('Resultado copiado al portapapeles'))
+      .catch(err => alert('Error al copiar'));
+  }
+</script>
+
+</body>
+</html>
