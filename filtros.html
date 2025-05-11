@@ -26,19 +26,23 @@
       font-size: 1.3rem;
     }
 
-    .row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .form-group {
       margin-bottom: 1rem;
     }
 
-    .row label {
+    .form-group label {
       font-weight: bold;
+      display: block;
+      margin-bottom: 0.3rem;
     }
 
-    input {
-      width: 100%;
+    .input-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .input-row input {
+      flex: 1;
       padding: 0.75rem;
       font-size: 1rem;
       border: 1px solid #ccc;
@@ -76,20 +80,20 @@
 <div class="container">
   <h2>Calculadora de Filtros de Crudo</h2>
 
-  <div class="row">
-    <label for="mmInicial1">Filtro 1 - MM Inicial</label>
-    <input type="number" id="mmInicial1" oninput="calcular()">
-
-    <label for="mmFinal1">Filtro 1 - MM Final</label>
-    <input type="number" id="mmFinal1" oninput="calcular()">
+  <div class="form-group">
+    <label>Filtro 1</label>
+    <div class="input-row">
+      <input type="number" placeholder="MM Inicial" id="mmInicial1" oninput="calcular()">
+      <input type="number" placeholder="MM Final" id="mmFinal1" oninput="calcular()">
+    </div>
   </div>
 
-  <div class="row">
-    <label for="mmInicial2">Filtro 2 - MM Inicial</label>
-    <input type="number" id="mmInicial2" oninput="calcular()">
-
-    <label for="mmFinal2">Filtro 2 - MM Final</label>
-    <input type="number" id="mmFinal2" oninput="calcular()">
+  <div class="form-group">
+    <label>Filtro 2</label>
+    <div class="input-row">
+      <input type="number" placeholder="MM Inicial" id="mmInicial2" oninput="calcular()">
+      <input type="number" placeholder="MM Final" id="mmFinal2" oninput="calcular()">
+    </div>
   </div>
 
   <div class="result" id="resultado">
