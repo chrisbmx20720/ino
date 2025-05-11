@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Lecitina</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    th, td {
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Calculadora de Lecitina</h2>
+  <table>
+    <tr>
+      <td><label>Luz Inicial</label><br><input type="number" id="luzInicial" oninput="calcular()"></td>
+      <td><label>cm Inicial</label><br><input type="text" id="cmInicial" readonly></td>
+      <td><label>kg Inicial</label><br><input type="text" id="kgInicial" readonly></td>
+    </tr>
+    <tr>
+      <td><label>Luz Final</label><br><input type="number" id="luzFinal" oninput="calcular()"></td>
+      <td><label>cm Final</label><br><input type="text" id="cmFinal" readonly></td>
+      <td><label>kg Final</label><br><input type="text" id="kgFinal" readonly></td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <label>Trasiego (kg):</label><br>
+        <input type="number" id="trasiego" oninput="calcular()">
+      </td>
+    </tr>
+  </table>
+
+  <div class="result" id="resultado">Lecitina: -</div>
+</div>
+
+<script>
+  function calcular() {
+    const luzInicial = parseFloat(document.getElementById('luzInicial').value);
+    const luzFinal = parseFloat(document.getElementById('luzFinal').value);
+    const trasiego = parseFloat(document.getElementById('trasiego').value) || 0;
+
+    let cmInicial = luzInicial ? 367 - luzInicial : '';
+    let cmFinal = luzFinal ? 367 - luzFinal : '';
+
+    let kgInicial = luzInicial ? (luzInicial * 43.68 + 1500) : '';
+    let kgFinal = luzFinal ? (luzFinal * 43.68 + 1500) : '';
+
+    document.getElementById('cmInicial').value = cmInicial !== '' ? cmInicial.toFixed(2) : '';
+    document.getElementById('kgInicial').value = kgInicial !== '' ? kgInicial.toFixed(2) : '';
+    document.getElementById('cmFinal').value = cmFinal !== '' ? cmFinal.toFixed(2) : '';
+    document.getElementById('kgFinal').value = kgFinal !== '' ? kgFinal.toFixed(2) : '';
+
+    if (!isNaN(kgInicial) && !isNaN(kgFinal)) {
+      const resultado = kgFinal - (kgInicial - trasiego);
+      document.getElementById('resultado').textContent = `Lecitina: ${resultado.toFixed(2)} kg`;
+    } else {
+      document.getElementById('resultado').textContent = 'Lecitina: -';
+    }
+  }
+</script>
+
+</body>
+</html>
