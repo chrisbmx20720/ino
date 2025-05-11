@@ -43,6 +43,11 @@
       font-size: 1rem;
     }
 
+    input[readonly] {
+      background-color: #e0e0e0;
+      cursor: not-allowed;
+    }
+
     button {
       width: 100%;
       padding: 0.75rem;
@@ -63,9 +68,50 @@
       text-align: center;
       margin-top: 1rem;
     }
+
+    /* Estilos del menú */
+    nav.menu {
+      background-color: #333;
+      padding: 10px 0;
+      margin-bottom: 1rem;
+    }
+
+    nav.menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+
+    nav.menu ul li {
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    nav.menu ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav.menu ul li a.active, nav.menu ul li a:hover {
+      text-decoration: underline;
+    }
   </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
+<nav class="menu">
+  <ul>
+    <li><a href="neutralizado.html">Neutralizado</a></li>
+    <li><a href="desgomado.html">Desgomado</a></li>
+    <li><a href="ad5.html">AD5</a></li>
+    <li><a href="pulmon.html">Pulmón</a></li>
+    <li><a href="blanqueo.html">Blanqueo</a></li>
+    <li><a href="lecitina.html" class="active">Lecitina</a></li>
+  </ul>
+</nav>
 
 <div class="container">
   <h2>Calculadora de Lecitina</h2>
@@ -100,8 +146,8 @@
     let cmInicial = luzInicial ? 367 - luzInicial : '';
     let cmFinal = luzFinal ? 367 - luzFinal : '';
 
-    let kgInicial = luzInicial ? (cmInicial * 43.68)+1500 : '';
-    let kgFinal = luzFinal ? (cmFinal * 43.68)+1500 : '';
+    let kgInicial = luzInicial ? (luzInicial * 43.68 + 1500) : '';
+    let kgFinal = luzFinal ? (luzFinal * 43.68 + 1500) : '';
 
     document.getElementById('cmInicial').value = cmInicial !== '' ? cmInicial.toFixed(2) : '';
     document.getElementById('kgInicial').value = kgInicial !== '' ? kgInicial.toFixed(2) : '';
