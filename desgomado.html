@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Desgomado</title>
+  <link rel="stylesheet" href="/css/style.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,10 +14,11 @@
       margin: auto;
     }
 
+    /* Contenedor de los inputs con Grid */
     .input-group {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+      gap: 15px; /* Espaciado entre las columnas */
     }
 
     .input-pair {
@@ -41,13 +45,18 @@
       border-radius: 5px;
     }
 
+    /* Optimización para pantallas pequeñas (móviles) */
     @media (max-width: 600px) {
       .input-group {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+      }
+
+      .input-pair {
+        width: 100%;
       }
     }
 
-    /* Styling for the select to ensure it aligns well */
+    /* Aseguramos que el select ocupe el ancho completo */
     select {
       padding: 8px;
       font-size: 16px;
@@ -56,6 +65,16 @@
   </style>
 </head>
 <body>
+
+  <nav class="menu">
+    <ul>
+      <li><a href="neutralizado.html">Neutralizado</a></li>
+      <li><a href="desgomado.html" class="active">Desgomado</a></li>
+      <li><a href="ad5.html">AD5</a></li>
+      <li><a href="pulmon.html">Pulmón</a></li>
+      <li><a href="blanqueo.html">Blanqueo</a></li>
+    </ul>
+  </nav>
 
   <h2>Formulario Desgomado</h2>
 
@@ -68,7 +87,6 @@
       <label for="mm3_final">MM3 Final:</label>
       <input type="number" id="mm3_final" step="any" />
     </div>
-
     <div class="input-pair">
       <label for="mm4_inicial">MM4 Inicial:</label>
       <input type="number" id="mm4_inicial" step="any" />
@@ -78,7 +96,7 @@
       <input type="number" id="mm4_final" step="any" />
     </div>
 
-    <div class="input-pair" style="grid-column: span 2;">
+    <div class="input-pair" style="grid-column: span 2;"> <!-- Ocupa ambas columnas -->
       <label for="dosificacion">Dosificación (%):</label>
       <select id="dosificacion">
         <option value="0.08">0.08%</option>
