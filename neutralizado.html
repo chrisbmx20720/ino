@@ -15,21 +15,17 @@
     }
 
     .form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
       padding: 0 20px;
     }
 
     .form-row {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
+      margin-bottom: 15px;
     }
 
     .form-group {
       flex: 1;
-      min-width: 200px;
     }
 
     label {
@@ -54,8 +50,8 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      margin: 10px 20px;
-      width: calc(100% - 40px);
+      margin: 10px 0;
+      width: 100%;
     }
 
     button:hover {
@@ -88,6 +84,7 @@
   <h2>Calculadora de Neutralizado</h2>
 
   <div class="form-container">
+    <!-- Fila 1 -->
     <div class="form-row">
       <div class="form-group">
         <label for="mm1Inicial">MM1 Inicial:</label>
@@ -99,6 +96,7 @@
       </div>
     </div>
 
+    <!-- Fila 2 -->
     <div class="form-row">
       <div class="form-group">
         <label for="sodaInicial">Soda Inicial (L):</label>
@@ -110,6 +108,7 @@
       </div>
     </div>
 
+    <!-- Fila 3 -->
     <div class="form-group">
       <label for="dosificacion">Dosificación Fosfórico (%):</label>
       <select id="dosificacion">
