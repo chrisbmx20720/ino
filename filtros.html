@@ -123,12 +123,12 @@
   </div>
 
   <div class="result" id="resultado">
-    Diferencia Filtro 1: -<br>
-    Diferencia Filtro 2: -<br>
-    Producción Filtrado: -
+    Diferencia Filtro 1: <span id="dif1">-</span><br>
+    Diferencia Filtro 2: <span id="dif2">-</span><br>
+    Producción Filtrado: <span id="totalProduccion">-</span>
   </div>
 
-  <button class="copy-btn" onclick="copiarResultado()">Copiar Resultado</button>
+  <button class="copy-btn" onclick="copiarProduccion()">Copiar Producción</button>
 </div>
 
 <script>
@@ -142,19 +142,15 @@
     const diferencia2 = mmFinal2 - mmInicial2;
     const total = diferencia1 + diferencia2;
 
-    const resultado = `
-      Diferencia Filtro 1: ${diferencia1.toFixed(2)}<br>
-      Diferencia Filtro 2: ${diferencia2.toFixed(2)}<br>
-      Producción Filtrado: ${total.toFixed(2)}
-    `;
-
-    document.getElementById('resultado').innerHTML = resultado;
+    document.getElementById('dif1').textContent = diferencia1.toFixed(2);
+    document.getElementById('dif2').textContent = diferencia2.toFixed(2);
+    document.getElementById('totalProduccion').textContent = total.toFixed(2);
   }
 
-  function copiarResultado() {
-    const resultText = document.getElementById('resultado').innerText;
-    navigator.clipboard.writeText(resultText)
-      .then(() => alert('Resultado copiado al portapapeles'))
+  function copiarProduccion() {
+    const total = document.getElementById('totalProduccion').textContent;
+    navigator.clipboard.writeText(total)
+      .then(() => alert('Producción copiada al portapapeles'))
       .catch(() => alert('Error al copiar al portapapeles'));
   }
 </script>
