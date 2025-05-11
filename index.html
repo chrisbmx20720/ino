@@ -13,19 +13,26 @@
     nav.menu {
       width: 100%;
       background-color: #1e1e2f;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      height: 100vh; /* Ocupa toda la altura de la pantalla */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     nav.menu ul {
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
       list-style: none;
       margin: 0;
       padding: 0;
+      width: 80%; /* Controla el ancho de los botones */
+      max-width: 300px;
     }
 
     nav.menu li {
-      border-bottom: 1px solid #333;
+      margin: 10px 0;
     }
 
     nav.menu a {
@@ -33,6 +40,9 @@
       padding: 15px;
       color: white;
       text-decoration: none;
+      text-align: center;
+      background-color: #2c2c3e;
+      border-radius: 5px;
       transition: background 0.3s;
     }
 
@@ -41,23 +51,27 @@
       background-color: #3e8ed0;
     }
 
-    .content {
-      padding: 20px;
-    }
-
-    /* Opcional: Mostrar horizontal en pantallas grandes */
+    /* Modo horizontal en pantallas grandes */
     @media (min-width: 768px) {
+      nav.menu {
+        height: auto;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
       nav.menu ul {
         flex-direction: row;
+        width: 100%;
+        max-width: none;
       }
 
       nav.menu li {
-        border-bottom: none;
-        border-right: 1px solid #333;
+        margin: 0;
+        flex: 1;
       }
 
-      nav.menu li:last-child {
-        border-right: none;
+      nav.menu a {
+        border-radius: 0;
       }
     }
   </style>
@@ -73,8 +87,6 @@
       <li><a href="blanqueo.html">Blanqueo</a></li>
     </ul>
   </nav>
-
-
 
 </body>
 </html>
