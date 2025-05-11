@@ -2,145 +2,170 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Desgomado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Neutralizado</title>
+
+  <!-- Enlace al CSS externo -->
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
+    h2 {
+      text-align: center;
+      color: #333;
     }
 
-    /* Contenedor de los inputs con Grid */
-    .input-group {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-      gap: 15px; /* Espaciado entre las columnas */
+    .form-container {
+      padding: 0 20px;
     }
 
-    .input-pair {
+    .form-row {
       display: flex;
-      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      flex: 1;
     }
 
     label {
       display: block;
-      margin-top: 10px;
+      margin-bottom: 5px;
+      font-weight: bold;
     }
 
     input, select {
       width: 100%;
       padding: 8px;
-      margin-top: 5px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
 
-    .resultado {
-      margin-top: 15px;
-      font-weight: bold;
-      background-color: #f4f4f4;
-      padding: 10px;
-      border-radius: 5px;
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
     }
 
-    /* Optimización para pantallas pequeñas (móviles) */
-    @media (max-width: 600px) {
-      .input-group {
-        grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
-      }
-
-      .input-pair {
-        width: 100%;
-      }
+    button:hover {
+      background-color: #45a049;
     }
 
-    /* Aseguramos que el select ocupe el ancho completo */
-    select {
-      padding: 8px;
-      font-size: 16px;
+    .results {
+      margin: 20px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
 
+    .results p {
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Menú externo -->
   <nav class="menu">
     <ul>
-      <li><a href="index.html">Inicio</a></li>
-<li><a href="neutralizado.html">Neutralizado</a></li>
-      <li><a href="desgomado.html" class="active">Desgomado</a></li>
-     
+      <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
+      <li><a href="desgomado.html">Desgomado</a></li>
     </ul>
   </nav>
 
-  <h2>Formulario Desgomado</h2>
+  <h2>Calculadora de Neutralizado</h2>
 
-  <div class="input-group">
-    <div class="input-pair">
-      <label for="mm3_inicial">MM3 Inicial:</label>
-      <input type="number" id="mm3_inicial" step="any" />
-    </div>
-    <div class="input-pair">
-      <label for="mm3_final">MM3 Final:</label>
-      <input type="number" id="mm3_final" step="any" />
-    </div>
-    <div class="input-pair">
-      <label for="mm4_inicial">MM4 Inicial:</label>
-      <input type="number" id="mm4_inicial" step="any" />
-    </div>
-    <div class="input-pair">
-      <label for="mm4_final">MM4 Final:</label>
-      <input type="number" id="mm4_final" step="any" />
+  <div class="form-container">
+    <!-- Fila 1 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="mm1Inicial">MM1 Inicial:</label>
+        <input type="number" id="mm1Inicial" step="any" />
+      </div>
+      <div class="form-group">
+        <label for="mm1Final">MM1 Final:</label>
+        <input type="number" id="mm1Final" step="any" />
+      </div>
     </div>
 
-    <div class="input-pair" style="grid-column: span 2;"> <!-- Ocupa ambas columnas -->
-      <label for="dosificacion">Dosificación (%):</label>
+    <!-- Fila 2 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="sodaInicial">Soda Inicial (L):</label>
+        <input type="number" id="sodaInicial" step="any" />
+      </div>
+      <div class="form-group">
+        <label for="sodaFinal">Soda Final (L):</label>
+        <input type="number" id="sodaFinal" step="any" />
+      </div>
+    </div>
+
+    <!-- Fila 3 -->
+    <div class="form-group">
+      <label for="dosificacion">Dosificación Fosfórico (%):</label>
       <select id="dosificacion">
-        <option value="0.08">0.08%</option>
-        <option value="0.07">0.07%</option>
-        <option value="0.06">0.06%</option>
-        <option value="0.05">0.05%</option>
-        <option value="0.04">0.04%</option>
-        <option value="0.03">0.03%</option>
+        <option value="0.03">0.03</option>
+        <option value="0.04">0.04</option>
+        <option value="0.05">0.05</option>
+        <option value="0.06">0.06</option>
+        <option value="0.07">0.07</option>
+        <option value="0.08">0.08</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label>
+        <input type="checkbox" id="sacosCitricos" />
+        ¿Se abrieron sacos de cítrico?
+      </label>
+    </div>
+
+    <button onclick="calcular()">Calcular</button>
   </div>
 
-  <div class="resultado" id="resultadoConsumo">Consumo de Aceite: 0</div>
-  <div class="resultado" id="resultadoProduccion">Producción Desgomado: 0</div>
-  <div class="resultado" id="resultadoAcetico">Acético: 0</div>
+  <div class="results" id="resultados"></div>
 
   <script>
-    const mm3_inicial = document.getElementById('mm3_inicial');
-    const mm3_final = document.getElementById('mm3_final');
-    const mm4_inicial = document.getElementById('mm4_inicial');
-    const mm4_final = document.getElementById('mm4_final');
-    const dosificacion = document.getElementById('dosificacion');
-
-    const resultadoConsumo = document.getElementById('resultadoConsumo');
-    const resultadoProduccion = document.getElementById('resultadoProduccion');
-    const resultadoAcetico = document.getElementById('resultadoAcetico');
-
-    [mm3_inicial, mm3_final, mm4_inicial, mm4_final, dosificacion].forEach(input => {
-      input.addEventListener('input', calcular);
-    });
-
     function calcular() {
-      const mm3Ini = parseFloat(mm3_inicial.value) || 0;
-      const mm3Fin = parseFloat(mm3_final.value) || 0;
-      const mm4Ini = parseFloat(mm4_inicial.value) || 0;
-      const mm4Fin = parseFloat(mm4_final.value) || 0;
-      const dosif = parseFloat(dosificacion.value) || 0;
+      const mm1Inicial = parseFloat(document.getElementById("mm1Inicial").value);
+      const mm1Final = parseFloat(document.getElementById("mm1Final").value);
+      const sodaInicial = parseFloat(document.getElementById("sodaInicial").value);
+      const sodaFinal = parseFloat(document.getElementById("sodaFinal").value);
+      const dosificacion = parseFloat(document.getElementById("dosificacion").value);
+      const sacosCitricos = document.getElementById("sacosCitricos").checked;
 
-      const consumo = mm3Fin - mm3Ini;
-      const produccion = mm4Fin - mm4Ini;
-      const acetico = consumo * (dosif / 100);
+      if (
+        isNaN(mm1Inicial) || isNaN(mm1Final) ||
+        isNaN(sodaInicial) || isNaN(sodaFinal) ||
+        isNaN(dosificacion)
+      ) {
+        alert("Por favor, completa todos los campos con valores numéricos.");
+        return;
+      }
 
-      resultadoConsumo.textContent = `Consumo de Aceite: ${consumo.toFixed(2)}`;
-      resultadoProduccion.textContent = `Producción Desgomado: ${produccion.toFixed(2)}`;
-      resultadoAcetico.textContent = `Acético: ${acetico.toFixed(4)}`;
+      const aceiteConsumido = mm1Final - mm1Inicial;
+      const aceiteProducido = aceiteConsumido * 0.98;
+      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
+      const diferenciaSoda = sodaInicial - sodaFinal;
+      const totalCitricos = sacosCitricos ? 50 : 0;
+
+      const resultados = `
+        <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
+        <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
+        <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
+        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
+        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
+      `;
+
+      document.getElementById("resultados").innerHTML = resultados;
     }
   </script>
 
