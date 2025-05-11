@@ -3,56 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <title>Calculadora de AD5</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 10px;
+      margin: 0;
       background-color: #f2f2f2;
     }
+
     .container {
       background: white;
-      padding: 20px;
+      padding: 1.5rem;
       border-radius: 10px;
-      max-width: 500px;
-      margin: auto;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 20px auto;
     }
+
+    h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
     input, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
+
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
       background-color: #007bff;
       color: white;
       border: none;
       border-radius: 5px;
     }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
     .result {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+      text-align: center;
+    }
+
+    nav.menu ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #ffffff;
+      margin: 0;
+    }
+
+    nav.menu ul li {
+      margin: 5px;
+    }
+
+    nav.menu ul li a {
+      text-decoration: none;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    nav.menu ul li a.active, nav.menu ul li a:hover {
+      background-color: #0056b3;
     }
   </style>
+
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-     <nav class="menu">
+
+  <nav class="menu">
     <ul>
-      <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
+      <li><a href="neutralizado.html">Neutralizado</a></li>
       <li><a href="desgomado.html">Desgomado</a></li>
-      <li><a href="ad5.html">AD5</a></li>
+      <li><a href="ad5.html" class="active">AD5</a></li>
       <li><a href="pulmon.html">Pulmón</a></li>
       <li><a href="blanqueo.html">Blanqueo</a></li>
     </ul>
   </nav>
+
   <div class="container">
     <h2>Calculadora de AD5</h2>
-    
+
     <label for="mmInicial">mm Inicial:</label>
     <input type="number" id="mmInicial" step="any">
 
@@ -64,7 +123,6 @@
       <option value="0.70">0.70</option>
       <option value="0.50">0.50</option>
       <option value="0.100">0.100</option>
-
     </select>
 
     <button onclick="calcular()">Calcular</button>
@@ -86,7 +144,7 @@
       const desodo = mmFinal - mmInicial;
       const blanqueado = desodo * 1.00144;
       const neutralizado = blanqueado * 1.00231;
-      const tierra = neutralizado * (dosificacion/100)    ;
+      const tierra = neutralizado * (dosificacion / 100);
 
       document.getElementById('resultado').innerHTML = `
         Desodo producido: ${desodo.toFixed(2)}<br>
@@ -96,5 +154,6 @@
       `;
     }
   </script>
+
 </body>
 </html>
