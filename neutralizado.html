@@ -6,8 +6,7 @@
   <title>Calculadora de Neutralizado</title>
 
   <!-- Enlace al CSS externo -->
- <link rel="stylesheet" href="/css/style.css">
-
+  <link rel="stylesheet" href="/css/style.css">
 
   <style>
     h2 {
@@ -86,6 +85,16 @@
   </div>
 
   <div class="form-group">
+    <label for="sodaInicial">Soda Inicial (L):</label>
+    <input type="number" id="sodaInicial" step="any" />
+  </div>
+
+  <div class="form-group">
+    <label for="sodaFinal">Soda Final (L):</label>
+    <input type="number" id="sodaFinal" step="any" />
+  </div>
+
+  <div class="form-group">
     <label for="dosificacion">Dosificación Fosfórico (%):</label>
     <select id="dosificacion">
       <option value="0.03">0.03</option>
@@ -97,6 +106,13 @@
     </select>
   </div>
 
+  <div class="form-group">
+    <label>
+      <input type="checkbox" id="sacosCitricos" />
+      ¿Se abrieron sacos de cítrico?
+    </label>
+  </div>
+
   <button onclick="calcular()">Calcular</button>
 
   <div class="results" id="resultados"></div>
@@ -105,9 +121,16 @@
     function calcular() {
       const mm1Inicial = parseFloat(document.getElementById("mm1Inicial").value);
       const mm1Final = parseFloat(document.getElementById("mm1Final").value);
+      const sodaInicial = parseFloat(document.getElementById("sodaInicial").value);
+      const sodaFinal = parseFloat(document.getElementById("sodaFinal").value);
       const dosificacion = parseFloat(document.getElementById("dosificacion").value);
+      const sacosCitricos = document.getElementById("sacosCitricos").checked;
 
-      if (isNaN(mm1Inicial) || isNaN(mm1Final) || isNaN(dosificacion)) {
+      if (
+        isNaN(mm1Inicial) || isNaN(mm1Final) ||
+        isNaN(sodaInicial) || isNaN(sodaFinal) ||
+        isNaN(dosificacion)
+      ) {
         alert("Por favor, completa todos los campos con valores numéricos.");
         return;
       }
@@ -115,11 +138,15 @@
       const aceiteConsumido = mm1Final - mm1Inicial;
       const aceiteProducido = aceiteConsumido * 0.98;
       const acidoFosforico = (aceiteConsumido * dosificacion / 100);
+      const diferenciaSoda = sodaInicial - sodaFinal;
+      const totalCitricos = sacosCitricos ? 50 : 0;
 
       const resultados = `
         <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
         <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
         <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
+        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
+        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
       `;
 
       document.getElementById("resultados").innerHTML = resultados;
