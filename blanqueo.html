@@ -118,7 +118,7 @@
       const mmInicial = parseFloat(mmInicialInput.value) || 0;
       const mmFinal = parseFloat(mmFinalInput.value) || 0;
       const diferencia = mmFinal - mmInicial;
-      const resultadoFinal = (diferencia * 1.0023125).toFixed(2);
+      const resultadoFinal = (diferencia *0.99769).toFixed(2);
       resultadoSpan.innerText = "Resultado: " + resultadoFinal;
 
       calcularTierra(); // recalcula tierra también
