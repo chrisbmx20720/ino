@@ -22,10 +22,11 @@
       display: flex;
       gap: 20px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
 
     .form-group {
-      flex: 1;
+      flex: 1 1 45%;
     }
 
     label {
@@ -68,6 +69,31 @@
 
     .results p {
       font-size: 1.1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+      }
+
+      .form-group {
+        flex: 1 1 100%;
+      }
     }
   </style>
 </head>
@@ -121,19 +147,52 @@
       </select>
     </div>
 
-   <div class="form-row">
-  <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
-    <label for="sacosCitricos" style="margin: 0;">¿Se abrieron sacos de cítrico?</label>
-    <input type="checkbox" id="sacosCitricos" />
-  </div>
-</div>
+    <div class="form-row">
+      <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+        <label for="sacosCitricos" style="margin: 0;">¿Se abrieron sacos de cítrico?</label>
+        <input type="checkbox" id="sacosCitricos" />
+      </div>
+    </div>
+
     <button onclick="calcular()">Calcular</button>
   </div>
 
   <div class="results" id="resultados"></div>
-<p style="color: #d9534f; font-weight: bold; margin-top: 15px;">
-  IMPORTANTE: EL JABONCILLO SE TIRA AL <strong>TAL_53</strong>.
-</p>
+
+  <div class="results">
+    <h3>Consumos Oracle</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Consumo (kg o L)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>80000010010</td>
+          <td id="consumoAceite">-</td>
+        </tr>
+        <tr>
+          <td>80000130001</td>
+          <td id="consumoAcido">-</td>
+        </tr>
+        <tr>
+          <td>80000140002</td>
+          <td id="consumoSoda">-</td>
+        </tr>
+        <tr>
+          <td>80000150003</td>
+          <td id="consumoCitricos">-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color: #d9534f; font-weight: bold; margin-top: 15px;">
+    IMPORTANTE: EL JABONCILLO SE TIRA AL <strong>TAL_53</strong>.
+  </p>
+
   <script>
     function calcular() {
       const mm1Inicial = parseFloat(document.getElementById("mm1Inicial").value);
@@ -167,6 +226,12 @@
       `;
 
       document.getElementById("resultados").innerHTML = resultados;
+
+      // Actualizar tabla de consumos Oracle
+      document.getElementById("consumoAceite").textContent = aceiteConsumido.toFixed(2);
+      document.getElementById("consumoAcido").textContent = acidoFosforico.toFixed(2);
+      document.getElementById("consumoSoda").textContent = diferenciaSoda.toFixed(2);
+      document.getElementById("consumoCitricos").textContent = totalCitricos.toFixed(2);
     }
   </script>
 
