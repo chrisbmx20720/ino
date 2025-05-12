@@ -128,7 +128,7 @@
       const acido = parseFloat(document.getElementById('acidoGraso').value) || 0;
       const rbd = parseFloat(document.getElementById('rbd').value) || 0;
 
-      const total = lecitina + acido + rbd;
+      const total = lecitina - acido - rbd;
 
       document.getElementById('resultado').innerHTML = `
         <p><strong>Total de Lecitina Sin Fludificar consumida:</strong> ${total.toFixed(2)} kg</p>
