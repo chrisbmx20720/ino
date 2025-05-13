@@ -14,7 +14,7 @@
     .form-row {
       display: flex;
       flex-wrap: nowrap;
-      gap: 12px;
+      gap: 20px; /* Mayor separación horizontal entre columnas */
       background: #fff;
       padding: 8px;
       margin-bottom: 12px;
@@ -28,7 +28,7 @@
 
     @media (min-width: 480px) {
       .form-col {
-        flex: 1 1 calc(33.33% - 8px);
+        flex: 1 1 calc(33.33% - 13.33px); /* Ajustado por el nuevo gap */
       }
     }
 
