@@ -17,17 +17,18 @@
       gap: 12px;
       background: #fff;
       padding: 16px;
+      margin-bottom: 12px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .form-col {
-      flex: 1 1 100%; /* Por defecto ocupa toda la fila */
+      flex: 1 1 100%;
     }
 
     @media (min-width: 480px) {
       .form-col {
-        flex: 1 1 calc(33.33% - 8px); /* 3 columnas en pantallas medianas o mayores */
+        flex: 1 1 calc(33.33% - 8px);
       }
     }
 
@@ -65,6 +66,7 @@
 <body>
 
   <form>
+    <!-- Primera fila -->
     <div class="form-row">
       <div class="form-col">
         <label for="nombre">Nombre</label>
@@ -84,6 +86,28 @@
         </select>
       </div>
     </div>
+
+    <!-- Segunda fila -->
+    <div class="form-row">
+      <div class="form-col">
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" name="correo" placeholder="Tu correo">
+      </div>
+      <div class="form-col">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="Tu teléfono">
+      </div>
+      <div class="form-col">
+        <label for="genero">Género</label>
+        <select id="genero" name="genero">
+          <option value="">Selecciona</option>
+          <option value="f">Femenino</option>
+          <option value="m">Masculino</option>
+          <option value="o">Otro</option>
+        </select>
+      </div>
+    </div>
+
     <button type="submit">Enviar</button>
   </form>
 
