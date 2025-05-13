@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Filtros de Crudo</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 1rem auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .input-row input {
+      flex: 1 1 45%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .result {
+      font-weight: bold;
+      text-align: left;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .copy-btn {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #218838;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table th, table td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    table thead {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="menu">
+  <a href="index.html">Volver al Menú Principal</a>
+</nav>
+
+<div class="container">
+  <h2>Calculadora de Filtros de Crudo</h2>
+
+  <div class="form-group">
+    <label>Filtro 1</label>
+    <div class="input-row">
+      <input type="number" placeholder="MM Inicial" id="mmInicial1" oninput="calcular()">
+      <input type="number" placeholder="MM Final" id="mmFinal1" oninput="calcular()">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Filtro 2</label>
+    <div class="input-row">
+      <input type="number" placeholder="MM Inicial" id="mmInicial2" oninput="calcular()">
+      <input type="number" placeholder="MM Final" id="mmFinal2" oninput="calcular()">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sacos">Cantidad de Sacos (17.4 kg c/u):</label>
+    <input type="number" id="sacos" oninput="calcular()" placeholder="0">
+  </div>
+
+  <div class="result" id="resultado">
+    Diferencia Filtro 1: <span id="dif1">-</span><br>
+    Diferencia Filtro 2: <span id="dif2">-</span><br>
+    Producción Filtrado: <span id="totalProduccion">-</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Cantidad (kg)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Consumido (sacos)</td>
+        <td id="consumoSacos">-</td>
+      </tr>
+      <tr>
+        <td>Producción Total</td>
+        <td id="produccionTabla">-</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="copy-btn" onclick="copiarProduccion()">Copiar Producción</button>
+</div>
+
+<script>
+  function calcular() {
+    const mmInicial1 = parseFloat(document.getElementById('mmInicial1').value) || 0;
+    const mmFinal1 = parseFloat(document.getElementById('mmFinal1').value) || 0;
+    const mmInicial2 = parseFloat(document.getElementById('mmInicial2').value) || 0;
+    const mmFinal2 = parseFloat(document.getElementById('mmFinal2').value) || 0;
+    const sacos = parseInt(document.getElementById('sacos').value) || 0;
+
+    const diferencia1 = mmFinal1 - mmInicial1;
+    const diferencia2 = mmFinal2 - mmInicial2;
+    const total = diferencia1 + diferencia2;
+    const consumoTotal = sacos * 17.4;
+
+    document.getElementById('dif1').textContent = diferencia1.toFixed(2);
+    document.getElementById('dif2').textContent = diferencia2.toFixed(2);
+    document.getElementById('totalProduccion').textContent = total.toFixed(2);
+
+    document.getElementById('consumoSacos').textContent = consumoTotal.toFixed(2);
+    document.getElementById('produccionTabla').textContent = total.toFixed(2);
+  }
+
+  function copiarProduccion() {
+    const total = document.getElementById('totalProduccion').textContent;
+    navigator.clipboard.writeText(total)
+      .then(() => alert('Producción copiada al portapapeles'))
+      .catch(() => alert('Error al copiar al portapapeles'));
+  }
+</script>
+
+</body>
+</html>
