@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Formulario 3 Columnas</title>
+  <title>Formulario Consumo y Producción</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -36,12 +36,6 @@
       }
     }
 
-    label {
-      display: block;
-      margin-bottom: 4px;
-      font-weight: bold;
-    }
-
     input, select {
       width: 96%;
       padding: 10px;
@@ -71,18 +65,31 @@
       color: #333;
     }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
     .resultado {
-      margin-top: 10px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <form oninput="calcularConsumo()">
-    <!-- CONSUMO -->
-    <h2>Consumo</h2>
+  <form oninput="calcularResultados()">
     <div class="form-section">
+      <h2>Consumo</h2>
       <p><b>Tanque 1</b></p>
       <div class="form-row">
         <div class="form-col">
@@ -92,14 +99,12 @@
           <input type="number" id="consumo1-final" placeholder="MM Final">
         </div>
         <div class="form-col">
-          <select>
+          <select id="tanque1-tipo">
             <option>TNG</option>
             <option>TAL 2</option>
-            <option>Argentina</option>
           </select>
         </div>
       </div>
-      <div class="resultado">Consumo T1: <span id="resultado-consumo1">0</span></div>
 
       <p><b>Tanque 2</b></p>
       <div class="form-row">
@@ -110,19 +115,28 @@
           <input type="number" id="consumo2-final" placeholder="MM Final">
         </div>
         <div class="form-col">
-          <select>
+          <select id="tanque2-tipo">
             <option>TNG</option>
             <option>TAL 2</option>
-            <option>Argentina</option>
           </select>
         </div>
       </div>
-      <div class="resultado">Consumo T2: <span id="resultado-consumo2">0</span></div>
-    </div>
 
-    <!-- PRODUCCIÓN -->
-    <h2>Producción</h2>
-    <div class="form-section">
+      <div class="form-row">
+        <div class="form-col">
+          <label for="sacos">Sacos consumidos</label>
+          <select id="sacos">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Producción</h2>
       <p><b>Tanque 1</b></p>
       <div class="form-row">
         <div class="form-col">
@@ -132,10 +146,9 @@
           <input type="number" id="produccion1-final" placeholder="MMU Final">
         </div>
         <div class="form-col">
-          <select>
+          <select id="produccion1-tipo">
             <option>TNG</option>
             <option>TAL 2</option>
-            <option>Argentina</option>
           </select>
         </div>
       </div>
@@ -149,30 +162,101 @@
           <input type="number" id="produccion2-final" placeholder="MMU Final">
         </div>
         <div class="form-col">
-          <select>
+          <select id="produccion2-tipo">
             <option>TNG</option>
             <option>TAL 2</option>
-            <option>Argentina</option>
           </select>
         </div>
       </div>
     </div>
 
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Tanque</th>
+          <th>Inicial</th>
+          <th>Final</th>
+          <th>Diferencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Consumo</td>
+          <td>Tanque 1</td>
+          <td id="c1i">0</td>
+          <td id="c1f">0</td>
+          <td id="c1d">0</td>
+        </tr>
+        <tr>
+          <td>Consumo</td>
+          <td>Tanque 2</td>
+          <td id="c2i">0</td>
+          <td id="c2f">0</td>
+          <td id="c2d">0</td>
+        </tr>
+        <tr>
+          <td>Producción</td>
+          <td>Tanque 1</td>
+          <td id="p1i">0</td>
+          <td id="p1f">0</td>
+          <td id="p1d">0</td>
+        </tr>
+        <tr>
+          <td>Producción</td>
+          <td>Tanque 2</td>
+          <td id="p2i">0</td>
+          <td id="p2f">0</td>
+          <td id="p2d">0</td>
+        </tr>
+        <tr>
+          <td colspan="4"><strong>Kilos consumidos (sacos x 17.4 kg)</strong></td>
+          <td id="kilos">0</td>
+        </tr>
+      </tbody>
+    </table>
+
     <button type="submit">Enviar</button>
   </form>
 
   <script>
-    function calcularConsumo() {
-      const c1i = parseFloat(document.getElementById('consumo1-inicial').value) || 0;
-      const c1f = parseFloat(document.getElementById('consumo1-final').value) || 0;
-      const c2i = parseFloat(document.getElementById('consumo2-inicial').value) || 0;
-      const c2f = parseFloat(document.getElementById('consumo2-final').value) || 0;
+    function calcularResultados() {
+      const getVal = id => parseFloat(document.getElementById(id).value) || 0;
 
-      const resultado1 = c1f - c1i;
-      const resultado2 = c2f - c2i;
+      // Consumo
+      const c1i = getVal('consumo1-inicial');
+      const c1f = getVal('consumo1-final');
+      const c2i = getVal('consumo2-inicial');
+      const c2f = getVal('consumo2-final');
 
-      document.getElementById('resultado-consumo1').textContent = resultado1.toFixed(2);
-      document.getElementById('resultado-consumo2').textContent = resultado2.toFixed(2);
+      // Producción
+      const p1i = getVal('produccion1-inicial');
+      const p1f = getVal('produccion1-final');
+      const p2i = getVal('produccion2-inicial');
+      const p2f = getVal('produccion2-final');
+
+      // Sacos
+      const sacos = parseInt(document.getElementById('sacos').value);
+      const kilos = (sacos * 17.4).toFixed(2);
+
+      // Mostrar resultados
+      document.getElementById('c1i').textContent = c1i;
+      document.getElementById('c1f').textContent = c1f;
+      document.getElementById('c1d').textContent = (c1f - c1i).toFixed(2);
+
+      document.getElementById('c2i').textContent = c2i;
+      document.getElementById('c2f').textContent = c2f;
+      document.getElementById('c2d').textContent = (c2f - c2i).toFixed(2);
+
+      document.getElementById('p1i').textContent = p1i;
+      document.getElementById('p1f').textContent = p1f;
+      document.getElementById('p1d').textContent = (p1f - p1i).toFixed(2);
+
+      document.getElementById('p2i').textContent = p2i;
+      document.getElementById('p2f').textContent = p2f;
+      document.getElementById('p2d').textContent = (p2f - p2i).toFixed(2);
+
+      document.getElementById('kilos').textContent = kilos;
     }
   </script>
 
