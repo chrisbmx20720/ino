@@ -173,45 +173,26 @@
     <table>
       <thead>
         <tr>
-          <th>Tipo</th>
+          <th>Código</th>
+          <th>Consumo</th>
           <th>Tanque</th>
-          <th>Inicial</th>
-          <th>Final</th>
-          <th>Diferencia</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Consumo</td>
-          <td>Tanque 1</td>
-          <td id="c1i">0</td>
-          <td id="c1f">0</td>
+          <td>C1</td>
           <td id="c1d">0</td>
+          <td id="t1">-</td>
         </tr>
         <tr>
-          <td>Consumo</td>
-          <td>Tanque 2</td>
-          <td id="c2i">0</td>
-          <td id="c2f">0</td>
+          <td>C2</td>
           <td id="c2d">0</td>
+          <td id="t2">-</td>
         </tr>
         <tr>
-          <td>Producción</td>
-          <td>Tanque 1</td>
-          <td id="p1i">0</td>
-          <td id="p1f">0</td>
-          <td id="p1d">0</td>
-        </tr>
-        <tr>
-          <td>Producción</td>
-          <td>Tanque 2</td>
-          <td id="p2i">0</td>
-          <td id="p2f">0</td>
-          <td id="p2d">0</td>
-        </tr>
-        <tr>
-          <td colspan="4"><strong>Kilos consumidos (sacos x 17.4 kg)</strong></td>
+          <td><strong>Sacos (kg)</strong></td>
           <td id="kilos">0</td>
+          <td>—</td>
         </tr>
       </tbody>
     </table>
@@ -229,32 +210,20 @@
       const c2i = getVal('consumo2-inicial');
       const c2f = getVal('consumo2-final');
 
-      // Producción
-      const p1i = getVal('produccion1-inicial');
-      const p1f = getVal('produccion1-final');
-      const p2i = getVal('produccion2-inicial');
-      const p2f = getVal('produccion2-final');
+      // Tipos de tanque
+      const t1 = document.getElementById('tanque1-tipo').value;
+      const t2 = document.getElementById('tanque2-tipo').value;
 
       // Sacos
       const sacos = parseInt(document.getElementById('sacos').value);
       const kilos = (sacos * 17.4).toFixed(2);
 
       // Mostrar resultados
-      document.getElementById('c1i').textContent = c1i;
-      document.getElementById('c1f').textContent = c1f;
       document.getElementById('c1d').textContent = (c1f - c1i).toFixed(2);
+      document.getElementById('t1').textContent = t1;
 
-      document.getElementById('c2i').textContent = c2i;
-      document.getElementById('c2f').textContent = c2f;
       document.getElementById('c2d').textContent = (c2f - c2i).toFixed(2);
-
-      document.getElementById('p1i').textContent = p1i;
-      document.getElementById('p1f').textContent = p1f;
-      document.getElementById('p1d').textContent = (p1f - p1i).toFixed(2);
-
-      document.getElementById('p2i').textContent = p2i;
-      document.getElementById('p2f').textContent = p2f;
-      document.getElementById('p2d').textContent = (p2f - p2i).toFixed(2);
+      document.getElementById('t2').textContent = t2;
 
       document.getElementById('kilos').textContent = kilos;
     }
