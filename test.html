@@ -8,19 +8,32 @@
     body {
       font-family: sans-serif;
       padding: 20px;
+      background: #f7f7f7;
     }
 
     h2 {
       text-align: center;
     }
 
-    .form-container {
+    .form-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
       margin: auto;
-      max-width: 700px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      flex: 1;
+      min-width: 200px;
     }
 
     label {
@@ -65,7 +78,17 @@
     }
 
     .results {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .section-title {
       margin-top: 20px;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
     }
   </style>
 </head>
@@ -73,7 +96,32 @@
 
   <h2>Consumo y Producción Lecitina</h2>
 
-  <div class="form-container">
+  <div class="form-section">
+
+    <!-- Consumo -->
+    <div class="section-title">Consumo</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>MM Inicial Tanque 1</label>
+        <input type="number" id="mmIni1" step="any">
+      </div>
+      <div class="form-group">
+        <label>MM Final Tanque 1</label>
+        <input type="number" id="mmFin1" step="any">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>MM Inicial Tanque 2</label>
+        <input type="number" id="mmIni2" step="any">
+      </div>
+      <div class="form-group">
+        <label>MM Final Tanque 2</label>
+        <input type="number" id="mmFin2" step="any">
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="sacos">Sacos consumidos:</label>
       <select id="sacos">
@@ -86,35 +134,44 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="produccion1">Producción Fludificada (kg) Línea 1:</label>
-      <input type="number" id="produccion1" step="any">
-    </div>
-
-    <div class="form-group">
-      <label for="produccion2">Producción Fludificada (kg) Línea 2:</label>
-      <input type="number" id="produccion2" step="any">
+    <!-- Producción -->
+    <div class="section-title">Producción</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Producción Línea 1 (kg)</label>
+        <input type="number" id="prod1" step="any">
+      </div>
+      <div class="form-group">
+        <label>Producción Línea 2 (kg)</label>
+        <input type="number" id="prod2" step="any">
+      </div>
     </div>
 
     <button onclick="calcular()">Calcular</button>
 
+    <!-- Resultados -->
     <div class="results" id="resultado"></div>
+
   </div>
 
   <script>
     function calcular() {
+      const ini1 = parseFloat(document.getElementById('mmIni1').value) || 0;
+      const fin1 = parseFloat(document.getElementById('mmFin1').value) || 0;
+      const ini2 = parseFloat(document.getElementById('mmIni2').value) || 0;
+      const fin2 = parseFloat(document.getElementById('mmFin2').value) || 0;
       const sacos = parseInt(document.getElementById('sacos').value);
-      const produccion1 = parseFloat(document.getElementById('produccion1').value) || 0;
-      const produccion2 = parseFloat(document.getElementById('produccion2').value) || 0;
-      const pesoPorSaco = 17.4;
-      const totalConsumo = sacos * pesoPorSaco;
-      const totalProduccion = produccion1 + produccion2;
+      const prod1 = parseFloat(document.getElementById('prod1').value) || 0;
+      const prod2 = parseFloat(document.getElementById('prod2').value) || 0;
 
-      // Códigos ejemplo (puedes personalizarlos)
-      const codigoMateriaPrima = "80000140007"; // Lecitina sin fludificar
-      const codigoProducto = "80000120001";     // Lecitina fludificada
+      const pesoSaco = 17.4;
+      const consumoSacos = sacos * pesoSaco;
 
-      const resultadoHTML = `
+      const consumo1 = fin1 - ini1;
+      const consumo2 = fin2 - ini2;
+      const totalProduccion = prod1 + prod2;
+
+      const tabla = `
         <h3>Reporte Oracle</h3>
         <table>
           <thead>
@@ -125,21 +182,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>${codigoMateriaPrima}</td>
-              <td>Consumo - Lecitina sin fludificar</td>
-              <td>${totalConsumo.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>${codigoProducto}</td>
-              <td>Producción - Lecitina fludificada</td>
-              <td>${totalProduccion.toFixed(2)}</td>
-            </tr>
+            <tr><td>80000110001</td><td>Consumo Tanque 1</td><td>${consumo1.toFixed(2)}</td></tr>
+            <tr><td>80000110002</td><td>Consumo Tanque 2</td><td>${consumo2.toFixed(2)}</td></tr>
+            <tr><td>80000140007</td><td>Sacos consumidos</td><td>${consumoSacos.toFixed(2)}</td></tr>
+            <tr><td>80000120001</td><td>Producción Total</td><td>${totalProduccion.toFixed(2)}</td></tr>
           </tbody>
         </table>
       `;
 
-      document.getElementById("resultado").innerHTML = resultadoHTML;
+      document.getElementById("resultado").innerHTML = tabla;
     }
   </script>
 
