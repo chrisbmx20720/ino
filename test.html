@@ -65,48 +65,94 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    h2 {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .resultado {
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-  <form>
+  <form oninput="calcularConsumo()">
+    <!-- CONSUMO -->
+    <h2>Consumo</h2>
     <div class="form-section">
-      <!-- Primera fila -->
       <p><b>Tanque 1</b></p>
       <div class="form-row">
         <div class="form-col">
-          <input type="text" id="nombre" name="nombre" placeholder="MM Inicial">
+          <input type="number" id="consumo1-inicial" placeholder="MM Inicial">
         </div>
         <div class="form-col">
-       
-          <input type="number" id="edad" name="edad" placeholder="MM Final">
+          <input type="number" id="consumo1-final" placeholder="MM Final">
         </div>
         <div class="form-col">
-         
-          <select id="pais" name="pais">
-            <option value="mx">TNG</option>
-            <option value="co">TAL 2</option>
-            <option value="ar">Argentina</option>
+          <select>
+            <option>TNG</option>
+            <option>TAL 2</option>
+            <option>Argentina</option>
+          </select>
+        </div>
+      </div>
+      <div class="resultado">Consumo T1: <span id="resultado-consumo1">0</span></div>
+
+      <p><b>Tanque 2</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="consumo2-inicial" placeholder="MM Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="consumo2-final" placeholder="MM Final">
+        </div>
+        <div class="form-col">
+          <select>
+            <option>TNG</option>
+            <option>TAL 2</option>
+            <option>Argentina</option>
+          </select>
+        </div>
+      </div>
+      <div class="resultado">Consumo T2: <span id="resultado-consumo2">0</span></div>
+    </div>
+
+    <!-- PRODUCCIÓN -->
+    <h2>Producción</h2>
+    <div class="form-section">
+      <p><b>Tanque 1</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="produccion1-inicial" placeholder="MMU Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="produccion1-final" placeholder="MMU Final">
+        </div>
+        <div class="form-col">
+          <select>
+            <option>TNG</option>
+            <option>TAL 2</option>
+            <option>Argentina</option>
           </select>
         </div>
       </div>
 
-      <!-- Segunda Fila -->
       <p><b>Tanque 2</b></p>
       <div class="form-row">
         <div class="form-col">
-          <input type="text" id="nombre" name="nombre" placeholder="MM Inicial">
+          <input type="number" id="produccion2-inicial" placeholder="MMU Inicial">
         </div>
         <div class="form-col">
-       
-          <input type="number" id="edad" name="edad" placeholder="MM Final">
+          <input type="number" id="produccion2-final" placeholder="MMU Final">
         </div>
         <div class="form-col">
-         
-          <select id="pais" name="pais">
-            <option value="mx">TNG</option>
-            <option value="co">TAL 2</option>
-            <option value="ar">Argentina</option>
+          <select>
+            <option>TNG</option>
+            <option>TAL 2</option>
+            <option>Argentina</option>
           </select>
         </div>
       </div>
@@ -114,6 +160,21 @@
 
     <button type="submit">Enviar</button>
   </form>
+
+  <script>
+    function calcularConsumo() {
+      const c1i = parseFloat(document.getElementById('consumo1-inicial').value) || 0;
+      const c1f = parseFloat(document.getElementById('consumo1-final').value) || 0;
+      const c2i = parseFloat(document.getElementById('consumo2-inicial').value) || 0;
+      const c2f = parseFloat(document.getElementById('consumo2-final').value) || 0;
+
+      const resultado1 = c1f - c1i;
+      const resultado2 = c2f - c2i;
+
+      document.getElementById('resultado-consumo1').textContent = resultado1.toFixed(2);
+      document.getElementById('resultado-consumo2').textContent = resultado2.toFixed(2);
+    }
+  </script>
 
 </body>
 </html>
