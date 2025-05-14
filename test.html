@@ -11,15 +11,19 @@
       background: #f4f4f4;
     }
 
+    .form-section {
+      background: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+
     .form-row {
       display: flex;
       flex-wrap: nowrap;
-      gap: 20px; /* Mayor separación horizontal entre columnas */
-      background: #fff;
-      padding: 8px;
+      gap: 20px;
       margin-bottom: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .form-col {
@@ -28,7 +32,7 @@
 
     @media (min-width: 480px) {
       .form-col {
-        flex: 1 1 calc(33.33% - 13.33px); /* Ajustado por el nuevo gap */
+        flex: 1 1 calc(33.33% - 13.33px);
       }
     }
 
@@ -66,45 +70,47 @@
 <body>
 
   <form>
-    <!-- Primera fila -->
-    <div class="form-row">
-      <div class="form-col">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre">
+    <div class="form-section">
+      <!-- Primera fila -->
+      <div class="form-row">
+        <div class="form-col">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre">
+        </div>
+        <div class="form-col">
+          <label for="edad">Edad</label>
+          <input type="number" id="edad" name="edad" placeholder="Tu edad">
+        </div>
+        <div class="form-col">
+          <label for="pais">País</label>
+          <select id="pais" name="pais">
+            <option value="">Selecciona</option>
+            <option value="mx">México</option>
+            <option value="co">Colombia</option>
+            <option value="ar">Argentina</option>
+          </select>
+        </div>
       </div>
-      <div class="form-col">
-        <label for="edad">Edad</label>
-        <input type="number" id="edad" name="edad" placeholder="Tu edad">
-      </div>
-      <div class="form-col">
-        <label for="pais">País</label>
-        <select id="pais" name="pais">
-          <option value="">Selecciona</option>
-          <option value="mx">México</option>
-          <option value="co">Colombia</option>
-          <option value="ar">Argentina</option>
-        </select>
-      </div>
-    </div>
 
-    <!-- Segunda fila -->
-    <div class="form-row">
-      <div class="form-col">
-        <label for="correo">Correo</label>
-        <input type="email" id="correo" name="correo" placeholder="Tu correo">
-      </div>
-      <div class="form-col">
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" name="telefono" placeholder="Tu teléfono">
-      </div>
-      <div class="form-col">
-        <label for="genero">Género</label>
-        <select id="genero" name="genero">
-          <option value="">Selecciona</option>
-          <option value="f">Femenino</option>
-          <option value="m">Masculino</option>
-          <option value="o">Otro</option>
-        </select>
+      <!-- Segunda fila -->
+      <div class="form-row">
+        <div class="form-col">
+          <label for="correo">Correo</label>
+          <input type="email" id="correo" name="correo" placeholder="Tu correo">
+        </div>
+        <div class="form-col">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="Tu teléfono">
+        </div>
+        <div class="form-col">
+          <label for="genero">Género</label>
+          <select id="genero" name="genero">
+            <option value="">Selecciona</option>
+            <option value="f">Femenino</option>
+            <option value="m">Masculino</option>
+            <option value="o">Otro</option>
+          </select>
+        </div>
       </div>
     </div>
 
