@@ -5,18 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Neutralizado</title>
 
-  <!-- Enlace al CSS externo -->
-  <link rel="stylesheet" href="/css/style.css">
-
   <style>
-     body {
+    body {
       font-family: Arial, sans-serif;
       padding: 15px 5px;
       background: #f4f4f4;
     }
 
     .form-section {
-
       background: #fff;
       padding:30px 5px;
       border-radius: 10px;
@@ -38,7 +34,7 @@
 
     .form-col-2 {
       flex: 0 0 50%;
-    box-sizing: border-box;
+      box-sizing: border-box;
     }
 
     @media (min-width: 480px) {
@@ -55,52 +51,60 @@
       border-radius: 2px;
     }
 
-    button {
-      margin-top: 16px;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
     h2 {
       margin-top: 20px;
       color: #333;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: center;
-    }
-
-    .resultado {
+    .results p {
       font-weight: bold;
+      margin: 6px 0;
     }
 
-    
+    /* Toggle switch styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: 0.3s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px; width: 20px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .slider {
+      background-color: #007BFF;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Menú externo -->
   <nav class="menu">
     <ul>
       <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
@@ -108,19 +112,17 @@
     </ul>
   </nav>
 
-  
-
   <div class="form-section">
-    <!-- Fila 1 -->
     <h2>Calculadora de Neutralizado</h2>
+
     <div class="form-row">
       <div class="form-col">
         <label for="mm1Inicial">MM1 Inicial:</label>
-        <input type="number" id="mm1Inicial" placeholder="">
+        <input type="number" id="mm1Inicial" placeholder="" />
       </div>
       <div class="form-col">
         <label for="mm1Final">MM1 Final:</label>
-        <input type="number" id="mm1Final" placeholder="">
+        <input type="number" id="mm1Final" placeholder="" />
       </div>
       <div class="form-col">
         <label for="tanque1-tipo">Tanque:</label>
@@ -131,7 +133,6 @@
       </div>
     </div>
 
-    <!-- Fila 2 -->
     <div class="form-row">
       <div class="form-col">
         <label for="sodaInicial">Soda Inicial:</label>
@@ -154,30 +155,17 @@
       </div>
     </div>
 
-    <!-- Checkbox
     <div class="form-row">
-      <div class="form-col">
-        <label for="sacosCitricos">
+      <div class="form-col-2">
+        <label for="sacosCitricos">¿Se abrieron sacos de cítrico?</label>
+      </div>
+      <div class="form-col-2">
+        <label class="switch">
           <input type="checkbox" id="sacosCitricos" />
-          ¿Se abrieron sacos de cítrico?
+          <span class="slider"></span>
         </label>
       </div>
-    </div> -->
-
-
-    <div class="form-row">
-  <div class="form-col-2">
-    <label for="sacosCitricos">¿Se abrieron sacos de cítrico?</label>
-  </div>
-  <div class="form-col-2">
-    <label class="switch">
-      <input type="checkbox" id="sacosCitricos" />
-      <span class="slider"></span>
-    </label>
-  </div>
-</div>
-
-    <button onclick="calcular()">Calcular</button>
+    </div>
   </div>
 
   <div class="results" id="resultados"></div>
@@ -200,26 +188,39 @@
         isNaN(sodaInicial) || isNaN(sodaFinal) ||
         isNaN(dosificacion)
       ) {
-        alert("Por favor, completa todos los campos con valores numéricos.");
+        document.getElementById("resultados").innerHTML = "";
         return;
       }
 
       const aceiteConsumido = mm1Final - mm1Inicial;
       const aceiteProducido = aceiteConsumido * 0.98;
-      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
+      const acidoFosforico = (aceiteConsumido * dosificacion);
       const diferenciaSoda = sodaFinal - sodaInicial;
       const totalCitricos = sacosCitricos ? 50 : 0;
 
       const resultados = `
-        <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
-        <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
-        <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
-        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
-        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
+        <p>Aceite Consumido: ${aceiteConsumido.toFixed(2)}</p>
+        <p>Aceite Producido (98%): ${aceiteProducido.toFixed(2)}</p>
+        <p>Ácido Fosfórico (L): ${acidoFosforico.toFixed(2)}</p>
+        <p>Diferencia de Soda (L): ${diferenciaSoda.toFixed(2)}</p>
+        <p>Total de Cítrico (kg): ${totalCitricos}</p>
       `;
 
       document.getElementById("resultados").innerHTML = resultados;
     }
+
+    // Agregamos event listeners para todos los inputs/select y checkbox
+    const elementos = [
+      "mm1Inicial", "mm1Final", "sodaInicial", "sodaFinal", "dosificacion", "sacosCitricos"
+    ];
+
+    elementos.forEach(id => {
+      document.getElementById(id).addEventListener("input", calcular);
+      document.getElementById(id).addEventListener("change", calcular);
+    });
+
+    // También ejecutamos cálculo inicial por si hay valores por defecto
+    calcular();
   </script>
 
 </body>
