@@ -5,45 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Neutralizado</title>
   <link rel="stylesheet" href="/css/style.css">
-
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 15px 5px;
       background: #f4f4f4;
     }
-
     .form-section {
       background: #fff;
-      padding: 30px 5px;
+      padding:30px 5px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-top: 30px;
       margin-bottom: 16px;
     }
-
     .form-row {
       display: flex;
       flex-wrap: nowrap;
       gap: 2px;
       margin-bottom: 12px;
     }
-
-    .form-col {
-      flex: 1 1 100%;
-    }
-
+    .form-col { flex: 1 1 100%; }
     .form-col-2 {
       flex: 0 0 50%;
       box-sizing: border-box;
     }
-
     @media (min-width: 480px) {
       .form-col {
         flex: 1 1 calc(33.33% - 13.33px);
       }
     }
-
     input, select {
       width: 96%;
       padding: 10px;
@@ -51,7 +42,6 @@
       border: 1px solid #ccc;
       border-radius: 2px;
     }
-
     button {
       margin-top: 16px;
       padding: 12px;
@@ -64,43 +54,27 @@
       cursor: pointer;
       font-weight: 700;
     }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    h2 {
-      margin-top: 20px;
-      color: #333;
-    }
-
+    button:hover { background-color: #0056b3; }
+    h2 { margin-top: 20px; color: #333; }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
-
     table, th, td {
       border: 1px solid #ccc;
     }
-
     th, td {
       padding: 10px;
       text-align: center;
     }
-
-    p {
-      font-size: 20px;
-    }
-
-    #resultados {
-      font-size: 20px;
-    }
+    .resultado { font-weight: bold; }
+    p { font-size: 20px; }
+    #resultados { font-size:20px; }
   </style>
 </head>
 <body>
 
-  <!-- Menú externo -->
   <nav class="menu">
     <ul>
       <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
@@ -113,11 +87,11 @@
     <div class="form-row">
       <div class="form-col">
         <label for="mm1Inicial">MM1 Inicial:</label>
-        <input type="number" id="mm1Inicial" placeholder="">
+        <input type="number" id="mm1Inicial">
       </div>
       <div class="form-col">
         <label for="mm1Final">MM1 Final:</label>
-        <input type="number" id="mm1Final" placeholder="">
+        <input type="number" id="mm1Final">
       </div>
       <div class="form-col">
         <label for="tanque1-tipo">Tanque:</label>
@@ -192,34 +166,40 @@
 
       const aceiteConsumido = mm1Final - mm1Inicial;
       const aceiteProducido = aceiteConsumido * 0.98;
-      const acidoFosforico = aceiteConsumido * dosificacion;
+      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
       const diferenciaSoda = sodaFinal - sodaInicial;
       const totalCitricos = sacosCitricos ? 50 : 0;
 
-      // Asignar código de producción según tanque
       const codigoProduccion = tanque === "TC-12" ? "TAL_7" : "TAL_8";
 
-      // Codificación del consumo
       const codigosConsumo = [
-        { codigo: "80000110006", cantidad: aceiteConsumido.toFixed(2) },
-        { codigo: "80000110007", cantidad: diferenciaSoda.toFixed(2) },
-        { codigo: "80000110008", cantidad: acidoFosforico.toFixed(2) }
+        { codigo: "80000010001", cantidad: aceiteConsumido.toFixed(2) },
+        { codigo: "80000110006", cantidad: acidoFosforico.toFixed(2) },
+        { codigo: "80000020002", cantidad: diferenciaSoda.toFixed(2) },
       ];
 
       if (sacosCitricos) {
-        codigosConsumo.push({ codigo: "80000110009", cantidad: totalCitricos });
+        codigosConsumo.push({ codigo: "80000300004", cantidad: totalCitricos.toFixed(2) });
       }
 
       let tablaHTML = `
         <h3>Tabla de Producción y Consumo</h3>
         <table>
           <thead>
-            <tr><th>Código</th><th>Cantidad</th></tr>
+            <tr><th>Código</th><th>Cantidad</th><th>Subinventario</th></tr>
           </thead>
           <tbody>
-            <tr><td>${codigoProduccion}</td><td>${aceiteProducido.toFixed(2)}</td></tr>
+            <tr>
+              <td>Consumido de ${codigoProduccion}</td>
+              <td>${aceiteProducido.toFixed(2)}</td>
+              <td>PRODUCCION</td>
+            </tr>
             ${codigosConsumo.map(item => `
-              <tr><td>${item.codigo}</td><td>${item.cantidad}</td></tr>
+              <tr>
+                <td>${item.codigo}</td>
+                <td>${item.cantidad}</td>
+                <td>MATERIA PRIMA</td>
+              </tr>
             `).join("")}
           </tbody>
         </table>
