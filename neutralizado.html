@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calculadora de Neutralizado</title>
-  <link rel="stylesheet" href="/css/style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulario Consumo y Producción</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,29 +21,27 @@
 
     .form-row {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 20px;
       margin-bottom: 12px;
     }
 
     .form-col {
-      flex: 1 1 calc(33.33% - 13.33px);
-      min-width: 180px;
+      flex: 1 1 100%;
     }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
+    @media (min-width: 480px) {
+      .form-col {
+        flex: 1 1 calc(33.33% - 13.33px);
+      }
     }
 
     input, select {
-      width: 100%;
+      width: 96%;
       padding: 10px;
       font-size: 16px;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+      border-radius: 2px;
     }
 
     button {
@@ -87,147 +83,153 @@
     .resultado {
       font-weight: bold;
     }
-
-    nav.menu {
-      background-color: #333;
-      padding: 10px;
-    }
-
-    nav.menu ul {
-      list-style: none;
-      display: flex;
-      gap: 10px;
-      padding: 0;
-      margin: 0;
-    }
-
-    nav.menu li {
-      display: inline;
-    }
-
-    nav.menu a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-
-    nav.menu a.active, nav.menu a:hover {
-      background-color: #555;
-    }
-
-    @media (max-width: 600px) {
-      .form-row {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <nav class="menu">
-    <ul>
-      <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
-      <li><a href="desgomado.html">Desgomado</a></li>
-    </ul>
-  </nav>
-
-  <h2>Calculadora de Neutralizado</h2>
-
-  <div class="form-container">
-    <!-- Fila 1 -->
-    <div class="form-row">
-      <div class="form-col">
-        <label for="mm1Inicial">MM1 Inicial:</label>
-        <input type="number" id="mm1Inicial" placeholder="MM Inicial">
+  <form oninput="calcularResultados()">
+    <div class="form-section">
+      <h2>Consumo</h2>
+      <p><b>Tanque 1</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="consumo1-inicial" placeholder="MM Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="consumo1-final" placeholder="MM Final">
+        </div>
+        <div class="form-col">
+          <select id="tanque1-tipo">
+            <option>TNG</option>
+            <option>TAL 2</option>
+          </select>
+        </div>
       </div>
-      <div class="form-col">
-        <label for="mm1Final">MM1 Final:</label>
-        <input type="number" id="mm1Final" placeholder="MM Final">
+
+      <p><b>Tanque 2</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="consumo2-inicial" placeholder="MM Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="consumo2-final" placeholder="MM Final">
+        </div>
+        <div class="form-col">
+          <select id="tanque2-tipo">
+            <option>TNG</option>
+            <option>TAL 2</option>
+          </select>
+        </div>
       </div>
-      <div class="form-col">
-        <label for="tanque1-tipo">Tanque:</label>
-        <select id="tanque1-tipo">
-          <option>TC-12</option>
-          <option>TC-14</option>
-        </select>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label for="sacos">Sacos consumidos</label>
+          <select id="sacos">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="form-col"></div>
+        <div class="form-col"></div>
+      </div>
+
+      <h2>Producción</h2>
+      <p><b>Tanque 1</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="produccion1-inicial" placeholder="MMU Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="produccion1-final" placeholder="MMU Final">
+        </div>
+        <div class="form-col">
+          <select id="produccion1-tipo">
+            <option>TNG</option>
+            <option>TAL 2</option>
+          </select>
+        </div>
+      </div>
+
+      <p><b>Tanque 2</b></p>
+      <div class="form-row">
+        <div class="form-col">
+          <input type="number" id="produccion2-inicial" placeholder="MMU Inicial">
+        </div>
+        <div class="form-col">
+          <input type="number" id="produccion2-final" placeholder="MMU Final">
+        </div>
+        <div class="form-col">
+          <select id="produccion2-tipo">
+            <option>TNG</option>
+            <option>TAL 2</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <!-- Fila 2 -->
-    <div class="form-row">
-      <div class="form-col">
-        <label for="sodaInicial">Soda Inicial:</label>
-        <input type="number" id="sodaInicial" step="any" />
-      </div>
-      <div class="form-col">
-        <label for="sodaFinal">Soda Final:</label>
-        <input type="number" id="sodaFinal" step="any" />
-      </div>
-      <div class="form-col">
-        <label for="dosificacion">Dosificación (%):</label>
-        <select id="dosificacion">
-          <option value="0.03">0.03</option>
-          <option value="0.04">0.04</option>
-          <option value="0.05">0.05</option>
-          <option value="0.06">0.06</option>
-          <option value="0.07">0.07</option>
-          <option value="0.08">0.08</option>
-        </select>
-      </div>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Consumo</th>
+          <th>Tanque</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>C1</td>
+          <td id="c1d">0</td>
+          <td id="t1">-</td>
+        </tr>
+        <tr>
+          <td>C2</td>
+          <td id="c2d">0</td>
+          <td id="t2">-</td>
+        </tr>
+        <tr>
+          <td><strong>Sacos (kg)</strong></td>
+          <td id="kilos">0</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <!-- Checkbox -->
-    <div class="form-row">
-      <div class="form-col" style="display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="sacosCitricos" />
-        <label for="sacosCitricos" style="margin: 0;">¿Se abrieron sacos de cítrico?</label>
-      </div>
-    </div>
-
-    <button onclick="calcular()">Calcular</button>
-  </div>
-
-  <div class="results" id="resultados"></div>
-
-  <p style="color: #155724; font-weight: bold; margin-top: 15px; text-align: center;">
-    IMPORTANTE: EL JABONCILLO SE TIRA AL <strong>TAL_53</strong>.
-  </p>
+    <button type="submit">Enviar</button>
+  </form>
 
   <script>
-    function calcular() {
-      const mm1Inicial = parseFloat(document.getElementById("mm1Inicial").value);
-      const mm1Final = parseFloat(document.getElementById("mm1Final").value);
-      const sodaInicial = parseFloat(document.getElementById("sodaInicial").value);
-      const sodaFinal = parseFloat(document.getElementById("sodaFinal").value);
-      const dosificacion = parseFloat(document.getElementById("dosificacion").value);
-      const sacosCitricos = document.getElementById("sacosCitricos").checked;
+    function calcularResultados() {
+      const getVal = id => parseFloat(document.getElementById(id).value) || 0;
 
-      if (
-        isNaN(mm1Inicial) || isNaN(mm1Final) ||
-        isNaN(sodaInicial) || isNaN(sodaFinal) ||
-        isNaN(dosificacion)
-      ) {
-        alert("Por favor, completa todos los campos con valores numéricos.");
-        return;
-      }
+      // Consumo
+      const c1i = getVal('consumo1-inicial');
+      const c1f = getVal('consumo1-final');
+      const c2i = getVal('consumo2-inicial');
+      const c2f = getVal('consumo2-final');
 
-      const aceiteConsumido = mm1Final - mm1Inicial;
-      const aceiteProducido = aceiteConsumido * 0.98;
-      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
-      const diferenciaSoda = sodaFinal - sodaInicial;
-      const totalCitricos = sacosCitricos ? 50 : 0;
+      // Tipos de tanque
+      const t1 = document.getElementById('tanque1-tipo').value;
+      const t2 = document.getElementById('tanque2-tipo').value;
 
-      const resultados = `
-        <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
-        <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
-        <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
-        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
-        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
-      `;
+      // Sacos
+      const sacos = parseInt(document.getElementById('sacos').value);
+      const kilos = (sacos * 17.4).toFixed(2);
 
-      document.getElementById("resultados").innerHTML = resultados;
+      // Mostrar resultados
+      document.getElementById('c1d').textContent = (c1f - c1i).toFixed(2);
+      document.getElementById('t1').textContent = t1;
+
+      document.getElementById('c2d').textContent = (c2f - c2i).toFixed(2);
+      document.getElementById('t2').textContent = t2;
+
+      document.getElementById('kilos').textContent = kilos;
     }
   </script>
+
 </body>
 </html>
