@@ -5,36 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Neutralizado</title>
   <link rel="stylesheet" href="/css/style.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 15px 5px;
       background: #f4f4f4;
     }
+
     .form-section {
       background: #fff;
-      padding:30px 5px;
+      padding: 30px 5px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-top: 30px;
       margin-bottom: 16px;
     }
+
     .form-row {
       display: flex;
       flex-wrap: nowrap;
       gap: 2px;
       margin-bottom: 12px;
     }
-    .form-col { flex: 1 1 100%; }
+
+    .form-col {
+      flex: 1 1 100%;
+    }
+
     .form-col-2 {
       flex: 0 0 50%;
       box-sizing: border-box;
     }
+
     @media (min-width: 480px) {
       .form-col {
         flex: 1 1 calc(33.33% - 13.33px);
       }
     }
+
     input, select {
       width: 96%;
       padding: 10px;
@@ -42,6 +51,7 @@
       border: 1px solid #ccc;
       border-radius: 2px;
     }
+
     button {
       margin-top: 16px;
       padding: 12px;
@@ -54,23 +64,38 @@
       cursor: pointer;
       font-weight: 700;
     }
-    button:hover { background-color: #0056b3; }
-    h2 { margin-top: 20px; color: #333; }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #333;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
+
     table, th, td {
       border: 1px solid #ccc;
     }
+
     th, td {
       padding: 10px;
       text-align: center;
     }
-    .resultado { font-weight: bold; }
-    p { font-size: 20px; }
-    #resultados { font-size:20px; }
+
+    p {
+      font-size: 20px;
+    }
+
+    #resultados {
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
@@ -173,16 +198,15 @@
       const codigoProduccion = tanque === "TC-12" ? "TAL_7" : "TAL_8";
 
       const codigosConsumo = [
-        { codigo: "80000010001", cantidad: aceiteConsumido.toFixed(2) },
-        { codigo: "80000110006", cantidad: acidoFosforico.toFixed(2) },
-        { codigo: "80000020002", cantidad: diferenciaSoda.toFixed(2) },
+        { codigo: "800001", cantidad: acidoFosforico.toFixed(2) },
+        { codigo: "100006", cantidad: diferenciaSoda.toFixed(2) }
       ];
 
       if (sacosCitricos) {
-        codigosConsumo.push({ codigo: "80000300004", cantidad: totalCitricos.toFixed(2) });
+        codigosConsumo.push({ codigo: "110006", cantidad: totalCitricos.toFixed(2) });
       }
 
-      let tablaHTML = `
+      const tablaHTML = `
         <h3>Tabla de Producción y Consumo</h3>
         <table>
           <thead>
@@ -192,13 +216,13 @@
             <tr>
               <td>Consumido de ${codigoProduccion}</td>
               <td>${aceiteProducido.toFixed(2)}</td>
-              <td>PRODUCCION</td>
+              <td>${codigoProduccion}</td>
             </tr>
             ${codigosConsumo.map(item => `
               <tr>
                 <td>${item.codigo}</td>
                 <td>${item.cantidad}</td>
-                <td>MATERIA PRIMA</td>
+                <td></td>
               </tr>
             `).join("")}
           </tbody>
