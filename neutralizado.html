@@ -59,7 +59,7 @@
       margin-top: 16px;
       padding: 12px;
       width: 100%;
-      font-size: 20px;
+      font-size: 25px;
       background-color: #007BFF;
       color: #fff;
       border: none;
@@ -96,7 +96,13 @@
       font-weight: bold;
     }
 
-  
+    p{
+      font-size: 40px;
+    }
+
+    #resultados {
+      font-size:30px;
+    }
 
     
   </style>
@@ -214,11 +220,11 @@
       const totalCitricos = sacosCitricos ? 50 : 0;
 
       const resultados = `
-        <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
-        <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
-        <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
-        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
-        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
+        <p style="font-size:30px;"><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
+        <p style="font-size:30px;"><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
+        <p style="font-size:30px;"><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
+        <p style="font-size:30px;"><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
+        <p style="font-size:30px;"><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
       `;
 
       document.getElementById("resultados").innerHTML = resultados;
