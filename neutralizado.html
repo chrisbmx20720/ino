@@ -170,4 +170,64 @@
           <option value="0.03">0.03</option>
           <option value="0.04">0.04</option>
           <option value="0.05">0.05</option>
-          <option value="0.06
+          <option value="0.06">0.06</option>
+          <option value="0.07">0.07</option>
+          <option value="0.08">0.08</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Checkbox -->
+    <div class="form-row">
+      <div class="form-col" style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="sacosCitricos" />
+        <label for="sacosCitricos" style="margin: 0;">¿Se abrieron sacos de cítrico?</label>
+      </div>
+    </div>
+
+    <button onclick="calcular()">Calcular</button>
+  </div>
+
+  <div class="results" id="resultados"></div>
+
+  <p style="color: #155724; font-weight: bold; margin-top: 15px; text-align: center;">
+    IMPORTANTE: EL JABONCILLO SE TIRA AL <strong>TAL_53</strong>.
+  </p>
+
+  <script>
+    function calcular() {
+      const mm1Inicial = parseFloat(document.getElementById("mm1Inicial").value);
+      const mm1Final = parseFloat(document.getElementById("mm1Final").value);
+      const sodaInicial = parseFloat(document.getElementById("sodaInicial").value);
+      const sodaFinal = parseFloat(document.getElementById("sodaFinal").value);
+      const dosificacion = parseFloat(document.getElementById("dosificacion").value);
+      const sacosCitricos = document.getElementById("sacosCitricos").checked;
+
+      if (
+        isNaN(mm1Inicial) || isNaN(mm1Final) ||
+        isNaN(sodaInicial) || isNaN(sodaFinal) ||
+        isNaN(dosificacion)
+      ) {
+        alert("Por favor, completa todos los campos con valores numéricos.");
+        return;
+      }
+
+      const aceiteConsumido = mm1Final - mm1Inicial;
+      const aceiteProducido = aceiteConsumido * 0.98;
+      const acidoFosforico = (aceiteConsumido * dosificacion / 100);
+      const diferenciaSoda = sodaFinal - sodaInicial;
+      const totalCitricos = sacosCitricos ? 50 : 0;
+
+      const resultados = `
+        <p><strong>Aceite Consumido:</strong> ${aceiteConsumido.toFixed(2)}</p>
+        <p><strong>Aceite Producido (98%):</strong> ${aceiteProducido.toFixed(2)}</p>
+        <p><strong>Ácido Fosfórico (L):</strong> ${acidoFosforico.toFixed(2)}</p>
+        <p><strong>Diferencia de Soda (L):</strong> ${diferenciaSoda.toFixed(2)}</p>
+        <p><strong>Total de Cítrico (kg):</strong> ${totalCitricos}</p>
+      `;
+
+      document.getElementById("resultados").innerHTML = resultados;
+    }
+  </script>
+</body>
+</html>
