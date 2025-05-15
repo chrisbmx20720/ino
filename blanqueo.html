@@ -65,7 +65,6 @@
       font-size: 1.5rem;
       margin-top: 1rem;
     }
-
   </style>
 </head>
 <body>
@@ -73,7 +72,6 @@
   <nav class="menu">
     <ul>
       <li><a href="index.html">Volver Menú principal</a></li>
-      
     </ul>
   </nav>
 
@@ -105,6 +103,10 @@
     <div class="resultado">
       <span id="tierra">Consumo de tierra: 0 kg / 0.00 t</span>
     </div>
+
+    <div class="resultado">
+      <span id="neutralizado">Neutralizado consumido: 0 mm</span>
+    </div>
   </div>
 
   <script>
@@ -113,13 +115,16 @@
     const sacosInput = document.getElementById('sacos');
     const resultadoSpan = document.getElementById('resultado');
     const tierraSpan = document.getElementById('tierra');
+    const neutralizadoSpan = document.getElementById('neutralizado');
 
     function calcularResultado() {
       const mmInicial = parseFloat(mmInicialInput.value) || 0;
       const mmFinal = parseFloat(mmFinalInput.value) || 0;
       const diferencia = mmFinal - mmInicial;
-      const resultadoFinal = (diferencia *0.99769).toFixed(2);
+      const resultadoFinal = (diferencia * 0.99769).toFixed(2);
       resultadoSpan.innerText = "Resultado: " + resultadoFinal;
+
+      neutralizadoSpan.innerText = "Neutralizado consumido: " + diferencia.toFixed(2) + " mm";
 
       calcularTierra(); // recalcula tierra también
     }
