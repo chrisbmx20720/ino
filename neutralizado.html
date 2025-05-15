@@ -145,7 +145,7 @@
 
   <div class="form-container">
     <!-- Fila 1 -->
-    <div class="form-row">
+    <!--<div class="form-row">
       <div class="form-group">
         <label for="mm1Inicial">MM1 Inicial:</label>
         <input type="number" id="mm1Inicial" step="any" />
@@ -154,9 +154,49 @@
         <label for="mm1Final">MM1 Final:</label>
         <input type="number" id="mm1Final" step="any" />
       </div>
+    </div>-->
+
+    <div class="form-row">
+        <div class="form-col">
+          <label for="mm1Inicial">MM1 Inicial:</label>
+          <input type="number" id="mm1Inicial" placeholder="MM Inicial">
+        </div>
+        <div class="form-col">
+          <label for="mm1Final">MM1 Final:</label>
+          <input type="number" id="mm1Final" placeholder="MM Final">
+        </div>
+        <div class="form-col">
+          <select id="tanque1-tipo">
+            <option>TC-12</option>
+            <option>TC-14</option>
+          </select>
+        </div>
     </div>
 
-    <!-- Fila 2 -->
+
+    <div class="form-row">
+        <div class="form-col">
+          <label for="mm1Inicial">Soda Inicial:</label>
+          <input type="number" id="sodaInicial" step="any" />
+        </div>
+        <div class="form-col">
+          <label for="mm1Final">Soda Final:</label>
+          <input type="number" id="sodaFinal" step="any" />
+        </div>
+        <div class="form-col">
+        <label for="dosificacion">Dosificación(%):</label>
+        <select id="dosificacion">
+        <option value="0.03">0.03</option>
+        <option value="0.04">0.04</option>
+        <option value="0.05">0.05</option>
+        <option value="0.06">0.06</option>
+        <option value="0.07">0.07</option>
+        <option value="0.08">0.08</option>
+      </select>
+        </div>
+    </div>
+
+    <!-- 
     <div class="form-row">
       <div class="form-group">
         <label for="sodaInicial">Soda Inicial (L):</label>
@@ -168,7 +208,7 @@
       </div>
     </div>
 
-    <!-- Fila 3 -->
+
     <div class="form-group">
       <label for="dosificacion">Dosificación Fosfórico (%):</label>
       <select id="dosificacion">
@@ -180,6 +220,7 @@
         <option value="0.08">0.08</option>
       </select>
     </div>
+Fila 3 -->
 
     <!-- Checkbox -->
     <div class="form-row">
