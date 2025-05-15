@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Neutralizado</title>
+  <link rel="stylesheet" href="/css/style.css">
 
   <style>
     body {
@@ -14,7 +15,7 @@
 
     .form-section {
       background: #fff;
-      padding:30px 5px;
+      padding: 30px 5px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-top: 30px;
@@ -51,60 +52,55 @@
       border-radius: 2px;
     }
 
+    button {
+      margin-top: 16px;
+      padding: 12px;
+      width: 100%;
+      font-size: 25px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
     h2 {
       margin-top: 20px;
       color: #333;
     }
 
-    .results p {
-      font-weight: bold;
-      margin: 6px 0;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
 
-    /* Toggle switch styles */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
+    table, th, td {
+      border: 1px solid #ccc;
     }
 
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
+    th, td {
+      padding: 10px;
+      text-align: center;
     }
 
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ccc;
-      border-radius: 34px;
-      transition: 0.3s;
+    p {
+      font-size: 20px;
     }
 
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px; width: 20px;
-      left: 3px; bottom: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-
-    input:checked + .slider {
-      background-color: #007BFF;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(24px);
+    #resultados {
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
 
+  <!-- Menú externo -->
   <nav class="menu">
     <ul>
       <li><a href="neutralizado.html" class="active">Neutralizado</a></li>
@@ -114,15 +110,14 @@
 
   <div class="form-section">
     <h2>Calculadora de Neutralizado</h2>
-
     <div class="form-row">
       <div class="form-col">
         <label for="mm1Inicial">MM1 Inicial:</label>
-        <input type="number" id="mm1Inicial" placeholder="" />
+        <input type="number" id="mm1Inicial" placeholder="">
       </div>
       <div class="form-col">
         <label for="mm1Final">MM1 Final:</label>
-        <input type="number" id="mm1Final" placeholder="" />
+        <input type="number" id="mm1Final" placeholder="">
       </div>
       <div class="form-col">
         <label for="tanque1-tipo">Tanque:</label>
@@ -166,6 +161,8 @@
         </label>
       </div>
     </div>
+
+    <button onclick="calcular()">Calcular</button>
   </div>
 
   <div class="results" id="resultados"></div>
@@ -182,45 +179,54 @@
       const sodaFinal = parseFloat(document.getElementById("sodaFinal").value);
       const dosificacion = parseFloat(document.getElementById("dosificacion").value);
       const sacosCitricos = document.getElementById("sacosCitricos").checked;
+      const tanque = document.getElementById("tanque1-tipo").value;
 
       if (
         isNaN(mm1Inicial) || isNaN(mm1Final) ||
         isNaN(sodaInicial) || isNaN(sodaFinal) ||
         isNaN(dosificacion)
       ) {
-        document.getElementById("resultados").innerHTML = "";
+        alert("Por favor, completa todos los campos con valores numéricos.");
         return;
       }
 
       const aceiteConsumido = mm1Final - mm1Inicial;
       const aceiteProducido = aceiteConsumido * 0.98;
-      const acidoFosforico = (aceiteConsumido * dosificacion);
+      const acidoFosforico = aceiteConsumido * dosificacion;
       const diferenciaSoda = sodaFinal - sodaInicial;
       const totalCitricos = sacosCitricos ? 50 : 0;
 
-      const resultados = `
-        <p>Aceite Consumido: ${aceiteConsumido.toFixed(2)}</p>
-        <p>Aceite Producido (98%): ${aceiteProducido.toFixed(2)}</p>
-        <p>Ácido Fosfórico (L): ${acidoFosforico.toFixed(2)}</p>
-        <p>Diferencia de Soda (L): ${diferenciaSoda.toFixed(2)}</p>
-        <p>Total de Cítrico (kg): ${totalCitricos}</p>
+      // Asignar código de producción según tanque
+      const codigoProduccion = tanque === "TC-12" ? "TAL_7" : "TAL_8";
+
+      // Codificación del consumo
+      const codigosConsumo = [
+        { codigo: "80000110006", cantidad: aceiteConsumido.toFixed(2) },
+        { codigo: "80000110007", cantidad: diferenciaSoda.toFixed(2) },
+        { codigo: "80000110008", cantidad: acidoFosforico.toFixed(2) }
+      ];
+
+      if (sacosCitricos) {
+        codigosConsumo.push({ codigo: "80000110009", cantidad: totalCitricos });
+      }
+
+      let tablaHTML = `
+        <h3>Tabla de Producción y Consumo</h3>
+        <table>
+          <thead>
+            <tr><th>Código</th><th>Cantidad</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>${codigoProduccion}</td><td>${aceiteProducido.toFixed(2)}</td></tr>
+            ${codigosConsumo.map(item => `
+              <tr><td>${item.codigo}</td><td>${item.cantidad}</td></tr>
+            `).join("")}
+          </tbody>
+        </table>
       `;
 
-      document.getElementById("resultados").innerHTML = resultados;
+      document.getElementById("resultados").innerHTML = tablaHTML;
     }
-
-    // Agregamos event listeners para todos los inputs/select y checkbox
-    const elementos = [
-      "mm1Inicial", "mm1Final", "sodaInicial", "sodaFinal", "dosificacion", "sacosCitricos"
-    ];
-
-    elementos.forEach(id => {
-      document.getElementById(id).addEventListener("input", calcular);
-      document.getElementById(id).addEventListener("change", calcular);
-    });
-
-    // También ejecutamos cálculo inicial por si hay valores por defecto
-    calcular();
   </script>
 
 </body>
