@@ -34,6 +34,11 @@
       flex: 1 1 100%;
     }
 
+    .form-col-2 {
+      flex: 0 0 50%;
+    box-sizing: border-box;
+    }
+
     @media (min-width: 480px) {
       .form-col {
         flex: 1 1 calc(33.33% - 13.33px);
@@ -158,10 +163,10 @@
 
 
     <div class="form-row">
-  <div class="form-col">
+  <div class="form-col-2">
     <label for="sacosCitricos">¿Se abrieron sacos de cítrico?</label>
   </div>
-  <div class="form-col">
+  <div class="form-col-2">
     <label class="switch">
       <input type="checkbox" id="sacosCitricos" />
       <span class="slider"></span>
