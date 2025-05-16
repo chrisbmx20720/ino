@@ -13,10 +13,10 @@
     }
 
     .section {
-      background-color: #d4edda; /* Bootstrap success background */
+      background-color: #d4edda; /* success */
       padding: 16px;
       border-radius: 8px;
-      color: #155724; /* Bootstrap success text color */
+      color: #155724;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
@@ -40,8 +40,34 @@
       list-style: none;
     }
 
-    strong {
+    table {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      background-color: #fff;
+      color: #000;
+      font-size: 0.95em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    table caption {
       font-weight: bold;
+      margin-bottom: 8px;
+      padding: 8px;
+      background-color: #c3e6cb;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+
+    .table-container {
+      overflow-x: auto;
     }
   </style>
 </head>
@@ -62,28 +88,44 @@
 
     <h2>¿CÓMO LLENAR UNA BOLETA DE MUESTRAS?</h2>
     <ol>
-      <li><strong>Paso 1 – Tipo de muestra:</strong> se mostrarán tres cuadros: <strong>TC</strong>, <strong>INV</strong> y <strong>REC</strong>. Marcar con una <strong>X</strong> según la etapa:
+      <li><strong>Paso 1 – Tipo de muestra:</strong> se mostrarán tres cuadros: <strong>TC</strong>, <strong>INV</strong>, <strong>REC</strong>. Marcar con una <strong>X</strong> según:
         <ul>
           <li><strong>TC:</strong> Trabajo en curso</li>
           <li><strong>INV:</strong> Inventario</li>
           <li><strong>REC:</strong> Proceso (recibo)</li>
         </ul>
       </li>
-      <li><strong>Paso 2 – Área:</strong> colocar el centro de trabajo, por ejemplo: <strong>Blanqueado_2</strong></li>
-      <li><strong>Paso 3 – Orden o Subinventario:</strong>
+      <li><strong>Paso 2 – Área:</strong> colocar el centro de trabajo (ej: Blanqueado_2)</li>
+      <li><strong>Paso 3 – Orden/Subinventario:</strong>
         <ul>
-          <li><strong>Trabajo en curso:</strong> número de orden de trabajo (ej: <strong>RF-25-100</strong>)</li>
-          <li><strong>Inventario/Recibo:</strong> número de subinventario (ej: <strong>TAL-100_7</strong>)</li>
+          <li><strong>Trabajo en curso:</strong> RF-25-100</li>
+          <li><strong>Inventario o recibo:</strong> TAL-100_7</li>
         </ul>
       </li>
-      <li><strong>Paso 4 – Artículos:</strong> número de artículo del producto (ej: <strong>8012-003</strong>)</li>
-      <li><strong>Paso 5 – Plan de inspección:</strong> nombre del plan (ej: <strong>Salida Neutro 601</strong>)</li>
-      <li><strong>Paso 6 – Lote:</strong> colocar el lote en trozos</li>
-      <li><strong>Paso 7 – Responsable:</strong> nombre de quien toma la muestra</li>
+      <li><strong>Paso 4 – Artículos:</strong> 8012-003</li>
+      <li><strong>Paso 5 – Plan de inspección:</strong> Salida Neutro 601</li>
+      <li><strong>Paso 6 – Lote:</strong> lote en trozos</li>
+      <li><strong>Paso 7 – Responsable:</strong> persona que toma la muestra</li>
       <li><strong>Paso 8 – Fecha:</strong> día en que se toma la muestra</li>
       <li><strong>Paso 9 – Hora:</strong> hora en que se toma la muestra</li>
-      <li><strong>Paso 10 – Operación:</strong> número de operación (usualmente <strong>10</strong>)</li>
+      <li><strong>Paso 10 – Operación:</strong> número de operación (normalmente 10)</li>
     </ol>
+
+    <div class="table-container">
+      <table>
+        <caption>Ejemplo de Boleta de Inspección</caption>
+        <tr><td><strong>Tipo de Muestra</strong></td><td>TC</td></tr>
+        <tr><td><strong>Área</strong></td><td>Blanqueado_2</td></tr>
+        <tr><td><strong>Orden/Subinventario</strong></td><td>RF-25-100</td></tr>
+        <tr><td><strong>Artículo</strong></td><td>8012-003</td></tr>
+        <tr><td><strong>Plan de Inspección</strong></td><td>Salida Neutro 601</td></tr>
+        <tr><td><strong>Lote</strong></td><td>LOTE-2025-T01</td></tr>
+        <tr><td><strong>Responsable</strong></td><td>Juan Pérez</td></tr>
+        <tr><td><strong>Fecha</strong></td><td>2025-05-16</td></tr>
+        <tr><td><strong>Hora</strong></td><td>10:30</td></tr>
+        <tr><td><strong>Operación</strong></td><td>10</td></tr>
+      </table>
+    </div>
   </div>
 </body>
 </html>
