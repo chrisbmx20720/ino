@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Filtros de Crudo</title>
- <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     * {
       box-sizing: border-box;
@@ -56,6 +56,14 @@
       border-radius: 5px;
     }
 
+    .form-group select {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
     .result {
       font-weight: bold;
       text-align: left;
@@ -79,6 +87,22 @@
 
     .copy-btn:hover {
       background-color: #218838;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table th, table td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    table thead {
+      background-color: #eee;
     }
   </style>
 </head>
@@ -107,11 +131,56 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="sacosSelect">Cantidad de Sacos (17.4 kg c/u):</label>
+    <select id="sacosSelect" onchange="calcular()">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+      <option value="19">19</option>
+      <option value="20">20</option>
+    </select>
+  </div>
+
   <div class="result" id="resultado">
     Diferencia Filtro 1: <span id="dif1">-</span><br>
     Diferencia Filtro 2: <span id="dif2">-</span><br>
     Producción Filtrado: <span id="totalProduccion">-</span>
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th>Cantidad (kg)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Consumido (sacos)</td>
+        <td id="consumoSacos">-</td>
+      </tr>
+      <tr>
+        <td>Producción Total</td>
+        <td id="produccionTabla">-</td>
+      </tr>
+    </tbody>
+  </table>
 
   <button class="copy-btn" onclick="copiarProduccion()">Copiar Producción</button>
 </div>
@@ -122,14 +191,19 @@
     const mmFinal1 = parseFloat(document.getElementById('mmFinal1').value) || 0;
     const mmInicial2 = parseFloat(document.getElementById('mmInicial2').value) || 0;
     const mmFinal2 = parseFloat(document.getElementById('mmFinal2').value) || 0;
+    const sacos = parseInt(document.getElementById('sacosSelect').value) || 0;
 
     const diferencia1 = mmFinal1 - mmInicial1;
     const diferencia2 = mmFinal2 - mmInicial2;
     const total = diferencia1 + diferencia2;
+    const consumoTotal = sacos * 17.5;
 
     document.getElementById('dif1').textContent = diferencia1.toFixed(2);
     document.getElementById('dif2').textContent = diferencia2.toFixed(2);
     document.getElementById('totalProduccion').textContent = total.toFixed(2);
+
+    document.getElementById('consumoSacos').textContent = consumoTotal.toFixed(2);
+    document.getElementById('produccionTabla').textContent = total.toFixed(2);
   }
 
   function copiarProduccion() {
