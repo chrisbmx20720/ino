@@ -195,25 +195,14 @@
       const diferenciaSoda = sodaFinal - sodaInicial;
       const totalCitricos = sacosCitricos ? 50 : 0;
 
- 
-
-      const codigosConsumo = [
-        { codigo: "11000020007", cantidad: acidoFosforico.toFixed(2) },
-        { codigo: "11000090007", cantidad: diferenciaSoda.toFixed(2) }
-      ];
-
-      if (sacosCitricos) {
-        codigosConsumo.push({ codigo: "11000020001", cantidad: totalCitricos.toFixed(2) });
-      }
-
       const destinoMap = {
         "TC-12": "TAL_7",
         "TC-14": "TAL_8"
       };
 
-      const destino = destinoMap[tipoTanque];
+      const destino = destinoMap[tanque];
 
-      document.getElementById('resultado').innerHTML = `
+      const tablaHTML = `
         <h4>Reporte Oracle</h4>
         <table>
           <thead>
@@ -223,11 +212,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>Neutralizado Producido</td><td>${rbd.toFixed(2)}</td></tr>
-<tr><td>80000110006</td><td>${aceiteConsumido.toFixed(2)}</td></tr>
+            <tr><td>Neutralizado Producido</td><td>${aceiteProducido.toFixed(2)}</td></tr>
+            <tr><td>80000110006</td><td>${aceiteConsumido.toFixed(2)}</td></tr>
             <tr><td>11000020007</td><td>${acidoFosforico.toFixed(2)}</td></tr>
             <tr><td>11000090007</td><td>${diferenciaSoda.toFixed(2)}</td></tr>
-<tr><td>11000020001</td><td>${totalCitricos.toFixed(2)}</td></tr>
+            ${sacosCitricos ? `<tr><td>11000020001</td><td>${totalCitricos.toFixed(2)}</td></tr>` : ""}
             <tr><td><strong>Consumir De</strong></td><td>${destino}</td></tr>
             <tr><td><strong>Almacenar En</strong></td><td>TAL_9</td></tr>
           </tbody>
