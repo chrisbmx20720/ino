@@ -117,13 +117,14 @@
     }
 
     .tarima-label {
-      width: 140px;
+      width: 160px;
       font-weight: bold;
     }
 
     .circles {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .circle {
@@ -131,6 +132,16 @@
       height: 40px;
       border-radius: 50%;
       background-color: #4CAF50;
+    }
+
+    .circle.incompleto {
+      background-color: #2196F3;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
     }
 
     @media (max-width: 600px) {
@@ -243,25 +254,26 @@
     function mostrarTarimas(totalKg) {
       const estañonKg = 200;
       const estañonesPorTarima = 4;
-      const totalEstañones = Math.floor(totalKg/ estañonKg);
+
+      const totalEstañones = Math.floor(totalKg / estañonKg);
+      const kgRestante = totalKg % estañonKg;
       const tarimasCompletas = Math.floor(totalEstañones / estañonesPorTarima);
       const estañonesRestantes = totalEstañones % estañonesPorTarima;
 
       const tarimasDiv = document.getElementById('tarimas');
       tarimasDiv.innerHTML = '';
-
       let index = 1;
 
       for (let i = 0; i < tarimasCompletas; i++) {
         tarimasDiv.appendChild(crearTarima(index++, estañonesPorTarima, true));
       }
 
-      if (estañonesRestantes > 0) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false));
+      if (estañonesRestantes > 0 || kgRestante > 0) {
+        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false, kgRestante));
       }
     }
 
-    function crearTarima(numero, numEstañones, completa) {
+    function crearTarima(numero, numEstañones, completa, restanteKg = 0) {
       const fila = document.createElement('div');
       fila.className = 'tarima-row';
 
@@ -276,6 +288,13 @@
         const circulo = document.createElement('div');
         circulo.className = 'circle';
         contenedorCirculos.appendChild(circulo);
+      }
+
+      if (!completa && restanteKg > 0) {
+        const circuloIncompleto = document.createElement('div');
+        circuloIncompleto.className = 'circle incompleto';
+        circuloIncompleto.textContent = `${restanteKg.toFixed(0)}kg`;
+        contenedorCirculos.appendChild(circuloIncompleto);
       }
 
       fila.appendChild(etiqueta);
