@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cálculo Lecitina sin Fludificar</title>
-
   <style>
     body {
       font-family: sans-serif;
@@ -104,7 +103,6 @@
       line-height: 1.6;
     }
 
-    /* Tarimas y estañones */
     #tarimasContainer {
       padding: 20px;
     }
@@ -114,10 +112,11 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
 
     .tarima-label {
-      width: 160px;
+      width: 180px;
       font-weight: bold;
     }
 
@@ -132,16 +131,15 @@
       height: 40px;
       border-radius: 50%;
       background-color: #4CAF50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
     }
 
-    .circle.incompleto {
-      background-color: #2196F3;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: bold;
+    .partial {
+      background-color: orange;
     }
 
     @media (max-width: 600px) {
@@ -227,7 +225,6 @@
 
       const destino = destinoMap[tipoTanque];
 
-      // Mostrar reporte
       document.getElementById('resultado').innerHTML = `
         <h4>Reporte Oracle</h4>
         <table>
@@ -247,39 +244,48 @@
         </table>
       `;
 
-      // Mostrar tarimas
-      mostrarTarimas(lecitina);
+      mostrarTarimas(lecitina, destino);
     }
 
-    function mostrarTarimas(totalKg) {
+    function mostrarTarimas(totalKg, destino) {
       const estañonKg = 200;
       const estañonesPorTarima = 4;
 
       const totalEstañones = Math.floor(totalKg / estañonKg);
-      const kgRestante = totalKg % estañonKg;
       const tarimasCompletas = Math.floor(totalEstañones / estañonesPorTarima);
       const estañonesRestantes = totalEstañones % estañonesPorTarima;
+      const kgRestantes = totalKg % estañonKg;
+
+      const fecha = new Date();
+      const fechaLote = `${String(fecha.getDate()).padStart(2, '0')}${String(fecha.getMonth() + 1).padStart(2, '0')}${String(fecha.getFullYear()).slice(-2)}`;
+
+      const loteMap = {
+        "TRE_5": "18",
+        "TRE_6": "19",
+        "TRE_7": "20"
+      };
+      const loteFinal = loteMap[destino];
 
       const tarimasDiv = document.getElementById('tarimas');
       tarimasDiv.innerHTML = '';
-      let index = 1;
 
       for (let i = 0; i < tarimasCompletas; i++) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesPorTarima, true));
+        const lote = `${fechaLote}-${loteFinal}-1`;
+        tarimasDiv.appendChild(crearTarima(lote, estañonesPorTarima, true));
       }
 
-      if (estañonesRestantes > 0 || kgRestante > 0) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false, kgRestante));
+      if (estañonesRestantes > 0 || kgRestantes > 0) {
+        tarimasDiv.appendChild(crearTarima('Tarima Incompleta', estañonesRestantes, false, kgRestantes));
       }
     }
 
-    function crearTarima(numero, numEstañones, completa, restanteKg = 0) {
+    function crearTarima(etiquetaTexto, numEstañones, completa, kgExtra = 0) {
       const fila = document.createElement('div');
       fila.className = 'tarima-row';
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'tarima-label';
-      etiqueta.textContent = `Tarima ${numero} ${completa ? '(Completa)' : '(Incompleta)'}`;
+      etiqueta.textContent = completa ? `Lote: ${etiquetaTexto}` : etiquetaTexto;
 
       const contenedorCirculos = document.createElement('div');
       contenedorCirculos.className = 'circles';
@@ -290,11 +296,11 @@
         contenedorCirculos.appendChild(circulo);
       }
 
-      if (!completa && restanteKg > 0) {
-        const circuloIncompleto = document.createElement('div');
-        circuloIncompleto.className = 'circle incompleto';
-        circuloIncompleto.textContent = `${restanteKg.toFixed(0)}kg`;
-        contenedorCirculos.appendChild(circuloIncompleto);
+      if (kgExtra > 0) {
+        const parcial = document.createElement('div');
+        parcial.className = 'circle partial';
+        parcial.textContent = `${kgExtra.toFixed(0)}kg`;
+        contenedorCirculos.appendChild(parcial);
       }
 
       fila.appendChild(etiqueta);
