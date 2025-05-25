@@ -104,7 +104,6 @@
       line-height: 1.6;
     }
 
-    /* Tarimas y estañones */
     #tarimasContainer {
       padding: 20px;
     }
@@ -117,14 +116,13 @@
     }
 
     .tarima-label {
-      width: 160px;
+      width: 200px;
       font-weight: bold;
     }
 
     .circles {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
     .circle {
@@ -134,14 +132,8 @@
       background-color: #4CAF50;
     }
 
-    .circle.incompleto {
-      background-color: #2196F3;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: bold;
+    .circle.incomplete {
+      background-color: orange;
     }
 
     @media (max-width: 600px) {
@@ -225,7 +217,14 @@
         "T120": "TRE_7"
       };
 
+      const loteMap = {
+        "T118": "18",
+        "T119": "19",
+        "T120": "20"
+      };
+
       const destino = destinoMap[tipoTanque];
+      const loteFinal = loteMap[tipoTanque];
 
       // Mostrar reporte
       document.getElementById('resultado').innerHTML = `
@@ -247,39 +246,72 @@
         </table>
       `;
 
-      // Mostrar tarimas
-      mostrarTarimas(lecitina);
+      mostrarTarimas(lecitina, loteFinal);
     }
 
-    function mostrarTarimas(totalKg) {
+    function mostrarTarimas(totalKg, loteFinal) {
       const estañonKg = 200;
       const estañonesPorTarima = 4;
-
       const totalEstañones = Math.floor(totalKg / estañonKg);
-      const kgRestante = totalKg % estañonKg;
       const tarimasCompletas = Math.floor(totalEstañones / estañonesPorTarima);
       const estañonesRestantes = totalEstañones % estañonesPorTarima;
+      const pesoRestante = totalKg - (totalEstañones * estañonKg);
 
       const tarimasDiv = document.getElementById('tarimas');
       tarimasDiv.innerHTML = '';
+
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = String(today.getFullYear()).slice(-2);
+      const fechaLote = `${day}${month}${year}`;
+
       let index = 1;
 
       for (let i = 0; i < tarimasCompletas; i++) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesPorTarima, true));
+        const lote = `${fechaLote}-${loteFinal}-${index}`;
+        tarimasDiv.appendChild(crearTarima(lote, estañonesPorTarima, true));
+        index++;
       }
 
-      if (estañonesRestantes > 0 || kgRestante > 0) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false, kgRestante));
+      if (estañonesRestantes > 0 || pesoRestante > 0) {
+        const fila = document.createElement('div');
+        fila.className = 'tarima-row';
+
+        const etiqueta = document.createElement('div');
+        etiqueta.className = 'tarima-label';
+        etiqueta.textContent = `Tarima Incompleta`;
+
+        const contenedorCirculos = document.createElement('div');
+        contenedorCirculos.className = 'circles';
+
+        for (let i = 0; i < estañonesRestantes; i++) {
+          const circulo = document.createElement('div');
+          circulo.className = 'circle incomplete';
+          contenedorCirculos.appendChild(circulo);
+        }
+
+        if (pesoRestante > 0.5) {
+          const circuloRestante = document.createElement('div');
+          circuloRestante.className = 'circle incomplete';
+          circuloRestante.title = `${pesoRestante.toFixed(1)} kg`;
+          circuloRestante.style.backgroundColor = 'red';
+          contenedorCirculos.appendChild(circuloRestante);
+        }
+
+        fila.appendChild(etiqueta);
+        fila.appendChild(contenedorCirculos);
+        tarimasDiv.appendChild(fila);
       }
     }
 
-    function crearTarima(numero, numEstañones, completa, restanteKg = 0) {
+    function crearTarima(etiquetaLote, numEstañones, completa) {
       const fila = document.createElement('div');
       fila.className = 'tarima-row';
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'tarima-label';
-      etiqueta.textContent = `Tarima ${numero} ${completa ? '(Completa)' : '(Incompleta)'}`;
+      etiqueta.textContent = `Lote: ${etiquetaLote}`;
 
       const contenedorCirculos = document.createElement('div');
       contenedorCirculos.className = 'circles';
@@ -288,13 +320,6 @@
         const circulo = document.createElement('div');
         circulo.className = 'circle';
         contenedorCirculos.appendChild(circulo);
-      }
-
-      if (!completa && restanteKg > 0) {
-        const circuloIncompleto = document.createElement('div');
-        circuloIncompleto.className = 'circle incompleto';
-        circuloIncompleto.textContent = `${restanteKg.toFixed(0)}kg`;
-        contenedorCirculos.appendChild(circuloIncompleto);
       }
 
       fila.appendChild(etiqueta);
