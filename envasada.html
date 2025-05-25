@@ -104,6 +104,46 @@
       line-height: 1.6;
     }
 
+    /* Tarimas y estañones */
+    #tarimasContainer {
+      padding: 20px;
+    }
+
+    .tarima-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .tarima-label {
+      width: 160px;
+      font-weight: bold;
+    }
+
+    .circles {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #4CAF50;
+    }
+
+    .circle.incompleto {
+      background-color: #2196F3;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
     @media (max-width: 600px) {
       .form-row {
         flex-direction: column;
@@ -111,6 +151,10 @@
 
       .first-col, .second-col {
         flex: 0 0 100%;
+      }
+
+      .tarima-label {
+        width: auto;
       }
     }
   </style>
@@ -151,6 +195,11 @@
 
   <div class="results" id="resultado"></div>
 
+  <div id="tarimasContainer">
+    <h3 style="padding: 0 20px;">Distribución de Tarimas</h3>
+    <div id="tarimas"></div>
+  </div>
+
   <div class="note-box">
     <strong>Notas importantes:</strong>
     <ul>
@@ -178,6 +227,7 @@
 
       const destino = destinoMap[tipoTanque];
 
+      // Mostrar reporte
       document.getElementById('resultado').innerHTML = `
         <h4>Reporte Oracle</h4>
         <table>
@@ -196,6 +246,60 @@
           </tbody>
         </table>
       `;
+
+      // Mostrar tarimas
+      mostrarTarimas(lecitina);
+    }
+
+    function mostrarTarimas(totalKg) {
+      const estañonKg = 200;
+      const estañonesPorTarima = 4;
+
+      const totalEstañones = Math.floor(totalKg / estañonKg);
+      const kgRestante = totalKg % estañonKg;
+      const tarimasCompletas = Math.floor(totalEstañones / estañonesPorTarima);
+      const estañonesRestantes = totalEstañones % estañonesPorTarima;
+
+      const tarimasDiv = document.getElementById('tarimas');
+      tarimasDiv.innerHTML = '';
+      let index = 1;
+
+      for (let i = 0; i < tarimasCompletas; i++) {
+        tarimasDiv.appendChild(crearTarima(index++, estañonesPorTarima, true));
+      }
+
+      if (estañonesRestantes > 0 || kgRestante > 0) {
+        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false, kgRestante));
+      }
+    }
+
+    function crearTarima(numero, numEstañones, completa, restanteKg = 0) {
+      const fila = document.createElement('div');
+      fila.className = 'tarima-row';
+
+      const etiqueta = document.createElement('div');
+      etiqueta.className = 'tarima-label';
+      etiqueta.textContent = `Tarima ${numero} ${completa ? '(Completa)' : '(Incompleta)'}`;
+
+      const contenedorCirculos = document.createElement('div');
+      contenedorCirculos.className = 'circles';
+
+      for (let i = 0; i < numEstañones; i++) {
+        const circulo = document.createElement('div');
+        circulo.className = 'circle';
+        contenedorCirculos.appendChild(circulo);
+      }
+
+      if (!completa && restanteKg > 0) {
+        const circuloIncompleto = document.createElement('div');
+        circuloIncompleto.className = 'circle incompleto';
+        circuloIncompleto.textContent = `${restanteKg.toFixed(0)}kg`;
+        contenedorCirculos.appendChild(circuloIncompleto);
+      }
+
+      fila.appendChild(etiqueta);
+      fila.appendChild(contenedorCirculos);
+      return fila;
     }
   </script>
 
