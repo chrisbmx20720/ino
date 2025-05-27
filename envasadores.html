@@ -5,40 +5,168 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cálculo Lecitina sin Fludificar</title>
   <style>
-    body { font-family: sans-serif; margin: 0; padding: 0; }
-    h2 { text-align: center; color: #333; margin: 20px 0; }
-    .form-container { padding: 20px; }
-    .form-row { display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
-    .form-group { min-width: 150px; }
-    .first-col { flex: 0 0 70%; }
-    .second-col { flex: 0 0 30%; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, select { width: 100%; padding: 8px; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; }
-    button { background-color: #4CAF50; color: white; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
-    button:hover { background-color: #45a049; }
-    .results { margin: 20px; background-color: #fff; padding: 15px; border-radius: 4px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    table, th, td { border: 1px solid #ccc; }
-    th, td { padding: 8px; text-align: left; }
-    .note-box { background-color: #d4edda; color: #155724; padding: 15px; margin: 20px; border-radius: 6px; font-size: 1rem; line-height: 1.6; }
-    #tarimasContainer { padding: 20px; }
-    .tarima-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-    .tarima-label { width: 200px; font-weight: bold; }
-    .circles { display: flex; gap: 10px; flex-wrap: wrap; }
-    .circle { width: 40px; height: 40px; border-radius: 50%; background-color: #4CAF50; }
-    .circle.incompleto { background-color: #f8d7da ; color: #721c24; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; }
-    @media (max-width: 600px) {
-      .form-row { flex-direction: column; }
-      .first-col, .second-col { flex: 0 0 100%; }
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-.estilo-danger-claro {
-  background-color: #f8d7da; /* Rojo claro, tipo alerta */
-  color: #721c24;            /* Rojo oscuro para el texto */
-  padding: 1rem;
-  border: 1px solid #f5c6cb;
-  border-radius: 0.5rem;
-}
-      .tarima-label { width: auto; }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin: 20px 0;
+    }
+
+    .form-container {
+      padding: 20px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      min-width: 150px;
+    }
+
+    .first-col {
+      flex: 0 0 70%;
+    }
+
+    .second-col {
+      flex: 0 0 30%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .results {
+      margin: 20px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    .note-box {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 15px;
+      margin: 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    #tarimasContainer {
+      padding: 20px;
+    }
+
+    .tarima-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .tarima-label {
+      width: 180px;
+      font-weight: bold;
+    }
+
+    .circles {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .circle, .square {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .circle {
+      border-radius: 50%;
+      background-color: #4CAF50;
+    }
+
+    .square {
+      background-color: lightgray;
+    }
+
+    .partial {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+      }
+
+      .first-col, .second-col {
+        flex: 0 0 100%;
+      }
+
+      .tarima-label {
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -73,10 +201,15 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Número de Lote (último dígito):</label>
-      <label><input type="radio" name="loteFinal" value="1" checked> 1</label>
-      <label><input type="radio" name="loteFinal" value="2"> 2</label>
+    <div class="form-row">
+      <div class="form-group first-col">
+        <label for="tipoEnvase">Tipo de Envase:</label>
+        <select id="tipoEnvase">
+          <option value="estanon">Estañones (200 kg)</option>
+          <option value="exportacion">Exportación (1000 kg)</option>
+          <option value="otro">Otro (700 kg)</option>
+        </select>
+      </div>
     </div>
 
     <button onclick="calcularLecitina()">Calcular</button>
@@ -92,6 +225,7 @@
   <div class="note-box">
     <strong>Notas importantes:</strong>
     <ul>
+      <li>No se consumen tanquetas <strong>BIOMAR</strong>.</li>
       <li>No se consume del <strong>TAL_48</strong>.</li>
       <li>Revisar que <strong>TRE_5</strong> vaya al <strong>TRE_5</strong>.</li>
       <li>Revisar que <strong>TRE_6</strong> vaya al <strong>TRE_6</strong>.</li>
@@ -105,27 +239,18 @@
       const acido = parseFloat(document.getElementById('acidoGraso').value) || 0;
       const rbd = parseFloat(document.getElementById('rbd').value) || 0;
       const tipoTanque = document.getElementById('tipoTanque').value;
-      const loteFinal = document.querySelector('input[name="loteFinal"]:checked').value;
+      const tipoEnvase = document.getElementById('tipoEnvase').value;
 
       const total = lecitina - acido - rbd;
 
       const destinoMap = {
-        "T118": { nombre: "TRE_5", numero: "18" },
-        "T119": { nombre: "TRE_6", numero: "19" },
-        "T120": { nombre: "TRE_7", numero: "20" }
+        "T118": "TRE_5",
+        "T119": "TRE_6",
+        "T120": "TRE_7"
       };
 
       const destino = destinoMap[tipoTanque];
 
-      // Fecha del sistema en formato AAMMDD
-      const hoy = new Date();
-      const fechaFormateada = hoy.toLocaleDateString('es-CL', {
-        year: '2-digit', month: '2-digit', day: '2-digit'
-      }).replace(/\//g, '');
-
-      const baseLote = `${fechaFormateada}-${destino.numero}-${loteFinal}`;
-
-      // Mostrar reporte
       document.getElementById('resultado').innerHTML = `
         <h4>Reporte Oracle</h4>
         <table>
@@ -139,65 +264,84 @@
             <tr><td>80000120001</td><td>${rbd.toFixed(2)}</td></tr>
             <tr><td>80000140007</td><td>${total.toFixed(2)}</td></tr>
             <tr><td>11000010005</td><td>${acido.toFixed(2)}</td></tr>
-            <tr><td><strong>Consumir De</strong></td><td>${destino.nombre}</td></tr>
-            <tr><td><strong>Almacenar En</strong></td><td>${destino.nombre}</td></tr>
-            <tr><td><strong>Lote</strong></td><td>${baseLote}</td></tr>
+            <tr><td><strong>Consumir De</strong></td><td>${destino}</td></tr>
+            <tr><td><strong>Almacenar En</strong></td><td>${destino}</td></tr>
           </tbody>
         </table>
       `;
 
-      // Mostrar tarimas
-      mostrarTarimas(lecitina, baseLote);
+      mostrarTarimas(lecitina, destino, tipoEnvase);
     }
 
-    function mostrarTarimas(totalKg, baseLote) {
-      const estañonKg = 200;
-      const estañonesPorTarima = 4;
+    function mostrarTarimas(totalKg, destino, tipoEnvase) {
+      let capacidad = 200;
+      let porTarima = 4;
+      let tipo = 'circle';
 
-      const totalEstañones = Math.floor(totalKg / estañonKg);
-      const kgRestante = totalKg % estañonKg;
-      const tarimasCompletas = Math.floor(totalEstañones / estañonesPorTarima);
-      const estañonesRestantes = totalEstañones % estañonesPorTarima;
+      if (tipoEnvase === 'exportacion') {
+        capacidad = 1000;
+        porTarima = 1;
+        tipo = 'square';
+      } else if (tipoEnvase === 'otro') {
+        capacidad = 700;
+        porTarima = 1;
+        tipo = 'square';
+      }
+
+      const totalUnidades = Math.floor(totalKg / capacidad);
+      const tarimasCompletas = Math.floor(totalUnidades / porTarima);
+      const unidadesRestantes = totalUnidades % porTarima;
+      const kgRestantes = totalKg % capacidad;
+
+      const fecha = new Date();
+      const fechaLote = `${String(fecha.getDate()).padStart(2, '0')}${String(fecha.getMonth() + 1).padStart(2, '0')}${String(fecha.getFullYear()).slice(-2)}`;
+
+      const loteMap = {
+        "TRE_5": "18",
+        "TRE_6": "19",
+        "TRE_7": "20"
+      };
+      const loteFinal = loteMap[destino];
 
       const tarimasDiv = document.getElementById('tarimas');
       tarimasDiv.innerHTML = '';
-      let index = 1;
 
       for (let i = 0; i < tarimasCompletas; i++) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesPorTarima, true, 0, baseLote));
+        const lote = `${fechaLote}-${loteFinal}-1`;
+        tarimasDiv.appendChild(crearTarima(lote, porTarima, true, 0, tipo));
       }
 
-      if (estañonesRestantes > 0 || kgRestante > 0) {
-        tarimasDiv.appendChild(crearTarima(index++, estañonesRestantes, false, kgRestante, baseLote));
+      if (unidadesRestantes > 0 || kgRestantes > 0) {
+        tarimasDiv.appendChild(crearTarima('Tarima Incompleta', unidadesRestantes, false, kgRestantes, tipo));
       }
     }
 
-    function crearTarima(numero, numEstañones, completa, restanteKg = 0, lote) {
+    function crearTarima(etiquetaTexto, unidades, completa, kgExtra = 0, tipo = 'circle') {
       const fila = document.createElement('div');
       fila.className = 'tarima-row';
 
       const etiqueta = document.createElement('div');
       etiqueta.className = 'tarima-label';
-      etiqueta.textContent = `${lote} ${completa ? '(Completa)' : '(Incompleta)'}`;
+      etiqueta.textContent = completa ? `Lote: ${etiquetaTexto}` : etiquetaTexto;
 
-      const contenedorCirculos = document.createElement('div');
-      contenedorCirculos.className = 'circles';
+      const contenedor = document.createElement('div');
+      contenedor.className = 'circles';
 
-      for (let i = 0; i < numEstañones; i++) {
-        const circulo = document.createElement('div');
-        circulo.className = 'circle';
-        contenedorCirculos.appendChild(circulo);
+      for (let i = 0; i < unidades; i++) {
+        const elemento = document.createElement('div');
+        elemento.className = tipo;
+        contenedor.appendChild(elemento);
       }
 
-      if (!completa && restanteKg > 0) {
-        const circuloIncompleto = document.createElement('div');
-        circuloIncompleto.className = 'circle incompleto';
-        circuloIncompleto.textContent = `${restanteKg.toFixed(0)}kg`;
-        contenedorCirculos.appendChild(circuloIncompleto);
+      if (kgExtra > 0) {
+        const parcial = document.createElement('div');
+        parcial.className = tipo + ' partial';
+        parcial.textContent = `${kgExtra.toFixed(0)}kg`;
+        contenedor.appendChild(parcial);
       }
 
       fila.appendChild(etiqueta);
-      fila.appendChild(contenedorCirculos);
+      fila.appendChild(contenedor);
       return fila;
     }
   </script>
