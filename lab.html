@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Distribución Estadística - Tiempo</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 6px;
+      text-align: center;
+    }
+    input {
+      width: 80px;
+      text-align: center;
+    }
+    .results {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Registro de Tiempos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Distancia</th>
+        <th>Tiempo</th>
+      </tr>
+    </thead>
+    <tbody id="data-table">
+      <!-- Filas generadas automáticamente -->
+    </tbody>
+  </table>
+
+  <button onclick="calcularDistribucion()">Generar Distribución Estadística</button>
+
+  <div class="results" id="tabla-distribucion"></div>
+
+  <script>
+    // Generar 20 filas para ingresar datos
+    const tableBody = document.getElementById("data-table");
+    for (let i = 1; i <= 20; i++) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${i}</td>
+        <td><input type="number" step="any" id="distancia-${i}"></td>
+        <td><input type="number" step="any" id="tiempo-${i}"></td>
+      `;
+      tableBody.appendChild(row);
+    }
+
+    function calcularDistribucion() {
+      const tiempos = [];
+      for (let i = 1; i <= 20; i++) {
+        const t = parseFloat(document.getElementById(`tiempo-${i}`).value);
+        if (!isNaN(t)) {
+          tiempos.push(t);
+        }
+      }
+
+      if (tiempos.length === 0) {
+        document.getElementById("tabla-distribucion").innerText = "Por favor, ingresa valores válidos.";
+        return;
+      }
+
+      const n = tiempos.length;
+      const min = Math.min(...tiempos);
+      const max = Math.max(...tiempos);
+      const rango = max - min;
+
+      const k = Math.ceil(1 + 3.322 * Math.log10(n));
+      const h = Math.ceil(rango / k * 100) / 100; // Redondeamos hacia arriba a 2 decimales
+
+      const clases = [];
+      let li = min;
+      for (let i = 0; i < k; i++) {
+        let ls = li + h;
+        const fi = tiempos.filter(t => t >= li && t < ls).length;
+        clases.push({ li, ls, fi });
+        li = ls;
+      }
+
+      // Ajustamos el último intervalo para incluir el valor máximo si no cayó en ningún intervalo
+      if (tiempos.includes(max)) {
+        const ultimaClase = clases[clases.length - 1];
+        if (max >= ultimaClase.ls) {
+          ultimaClase.ls = max + 0.01;
+          ultimaClase.fi = tiempos.filter(t => t >= ultimaClase.li && t <= ultimaClase.ls).length;
+        }
+      }
+
+      // Calcular frecuencias acumuladas
+      let fiAcum = 0;
+      const total = tiempos.length;
+      let html = `
+        <h3>Tabla de Distribución de Frecuencia (Tiempo)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Clase</th>
+              <th>Intervalo</th>
+              <th>fi</th>
+              <th>Fi</th>
+              <th>fr</th>
+              <th>Fr</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      let frAcum = 0;
+      clases.forEach((c, i) => {
+        fiAcum += c.fi;
+        const fr = (c.fi / total);
+        frAcum += fr;
+        html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${c.li.toFixed(2)} - ${c.ls.toFixed(2)}</td>
+            <td>${c.fi}</td>
+            <td>${fiAcum}</td>
+            <td>${(fr * 100).toFixed(2)}%</td>
+            <td>${(frAcum * 100).toFixed(2)}%</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+
+      document.getElementById("tabla-distribucion").innerHTML = html;
+    }
+  </script>
+
+</body>
+</html>
