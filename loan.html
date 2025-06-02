@@ -40,8 +40,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      mask-image: radial-gradient(circle at center, transparent 60px, black 61px);
-      -webkit-mask-image: radial-gradient(circle at center, transparent 60px, black 61px);
+      mask-image: radial-gradient(circle at center, transparent 70px, black 71px);
+      -webkit-mask-image: radial-gradient(circle at center, transparent 70px, black 71px);
     }
 
     .thumb {
@@ -51,9 +51,7 @@
       background: #007BFF;
       border: 3px solid white;
       border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -100%);
+      transform: translate(-50%, -50%);
       cursor: pointer;
       z-index: 2;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -119,9 +117,13 @@
     }
 
     function setThumbAngle(angle) {
-      const radius = 90;
-      const x = radius * Math.cos(angle) + 110;
-      const y = radius * Math.sin(angle) + 110;
+      const dialSize = 220;
+      const thumbSize = 28;
+      const ringThickness = 20; // visual thickness
+      const radius = (dialSize / 2) - (ringThickness / 2);
+      const center = dialSize / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
       thumb.style.left = `${x}px`;
       thumb.style.top = `${y}px`;
     }
