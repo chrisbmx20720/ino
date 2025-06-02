@@ -1,179 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Loan Calculator Circular</title>
+  <meta charset="UTF-8">
+  <title>Fully Rounded Range Slider</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f5f5f5;
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: Arial, sans-serif;
+      padding: 40px;
     }
 
-    .calculator {
-      text-align: center;
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .dial {
-      position: relative;
-      width: 220px;
-      height: 220px;
-      margin: 0 auto 1rem;
-    }
-
-    .track {
+    .slidecontainer {
       width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: conic-gradient(
-        #007BFF var(--angle, 0deg),
-        #e0e0e0 var(--angle, 0deg)
-      );
-      position: absolute;
-      top: 0;
-      left: 0;
-      mask-image: radial-gradient(circle at center, transparent 85px, black 86px);
-      -webkit-mask-image: radial-gradient(circle at center, transparent 85px, black 86px);
+      max-width: 400px;
     }
 
-    .thumb {
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: #007BFF;
-      border: 3px solid white;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 25px;
+      background: #d3d3d3;
+      border-radius: 25px; /* Rounded track */
+      outline: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* WebKit browsers (Chrome, Safari, Edge) */
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      background: #04AA6D;
       cursor: pointer;
-      z-index: 2;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 50%; /* Rounded thumb */
+      border: none;
+      margin-top: 0px; /* Align thumb with track */
     }
 
-    .center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-weight: bold;
-      color: #333;
-      font-size: 1.1rem;
-      z-index: 1;
+    /* Firefox */
+    .slider::-moz-range-track {
+      background: #d3d3d3;
+      height: 25px;
+      border-radius: 25px; /* Rounded track */
     }
 
-    .output {
-      margin-top: 1rem;
-    }
-
-    .value {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #007BFF;
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      background: #04AA6D;
+      cursor: pointer;
+      border-radius: 50%; /* Rounded thumb */
+      border: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="calculator">
-    <div class="dial" id="dial">
-      <div class="track" id="track"></div>
-      <div class="thumb" id="thumb"></div>
-      <div class="center" id="loanValue">$5000</div>
-    </div>
-    <div class="output">
-      <h3>Monthly Payment</h3>
-      <div class="value" id="monthlyPayment">$263.53</div>
-    </div>
+  <h1>Rounded Range Slider</h1>
+
+  <div class="slidecontainer">
+    <p>Custom rounded range slider:</p>
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
   </div>
-
-  <script>
-    const dial = document.getElementById('dial');
-    const thumb = document.getElementById('thumb');
-    const track = document.getElementById('track');
-    const loanValue = document.getElementById('loanValue');
-    const monthlyPayment = document.getElementById('monthlyPayment');
-
-    const min = 1000;
-    const max = 10000;
-    let value = 5000;
-
-    function calculatePayment(amount, rate = 0.05, months = 24) {
-      const r = rate / 12;
-      const payment = (amount * r) / (1 - Math.pow(1 + r, -months));
-      return payment.toFixed(2);
-    }
-
-    function updateUI(val, angle) {
-      loanValue.textContent = `$${val}`;
-      monthlyPayment.textContent = `$${calculatePayment(val)}`;
-      const deg = (angle * (180 / Math.PI) + 360) % 360;
-      track.style.setProperty('--angle', `${deg}deg`);
-      setThumbPosition(angle);
-    }
-
-    function setThumbPosition(angle) {
-      const radius = 100;
-      const trackWidth = 15;
-      const r = radius - trackWidth;
-      const x = radius + r * Math.cos(angle);
-      const y = radius + r * Math.sin(angle);
-      thumb.style.left = `${x}px`;
-      thumb.style.top = `${y}px`;
-    }
-
-    function angleToValue(angle) {
-      // adjust so 0 is at top
-      angle = (angle + 2 * Math.PI) % (2 * Math.PI);
-      return Math.round(min + (angle / (2 * Math.PI)) * (max - min));
-    }
-
-    function valueToAngle(val) {
-      return ((val - min) / (max - min)) * 2 * Math.PI;
-    }
-
-    function handleDrag(event) {
-      const rect = dial.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const x = (event.touches ? event.touches[0].clientX : event.clientX) - centerX;
-      const y = (event.touches ? event.touches[0].clientY : event.clientY) - centerY;
-
-      let angle = Math.atan2(y, x) - Math.PI / 2;
-      if (angle < 0) angle += 2 * Math.PI;
-
-      value = angleToValue(angle);
-      updateUI(value, angle);
-    }
-
-    function startDrag(e) {
-      e.preventDefault();
-      document.addEventListener('mousemove', handleDrag);
-      document.addEventListener('touchmove', handleDrag);
-      document.addEventListener('mouseup', stopDrag);
-      document.addEventListener('touchend', stopDrag);
-    }
-
-    function stopDrag() {
-      document.removeEventListener('mousemove', handleDrag);
-      document.removeEventListener('touchmove', handleDrag);
-      document.removeEventListener('mouseup', stopDrag);
-      document.removeEventListener('touchend', stopDrag);
-    }
-
-    thumb.addEventListener('mousedown', startDrag);
-    thumb.addEventListener('touchstart', startDrag);
-
-    // Initialize at 0 deg (top)
-    const initialAngle = valueToAngle(value) - Math.PI / 2;
-    updateUI(value, initialAngle);
-  </script>
 
 </body>
 </html>
