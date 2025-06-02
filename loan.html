@@ -87,7 +87,7 @@
     const max = 10000;
     let value = 5000;
 
-    function calculatePayment(amount, rate = 0.05, months = 24) {
+    function calculatePayment(amount, rate = 0.05, months = 23) {
       const r = rate / 12;
       const payment = (amount * r) / (1 - Math.pow(1 + r, -months));
       return payment.toFixed(2);
