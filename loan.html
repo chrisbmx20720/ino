@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Loan Calculator</title>
+  <meta charset="UTF-8" />
+  <title>Loan Calculator - Circular Slider</title>
   <style>
     body {
       font-family: sans-serif;
+      background: #f4f4f4;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
       margin: 0;
-      background: #f4f4f4;
+    }
+
+    h2 {
+      margin-bottom: 20px;
     }
 
     .circular-container {
@@ -32,26 +36,20 @@
       cursor: pointer;
     }
 
-    input[type="range"] {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
     .value-display {
       position: absolute;
       top: 45%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 20px;
+      font-size: 22px;
+      font-weight: bold;
       text-align: center;
-      line-height: 1.3;
     }
 
     .result {
       margin-top: 30px;
-      font-size: 18px;
       text-align: center;
+      font-size: 18px;
     }
 
     .result strong {
@@ -70,7 +68,6 @@
     <path id="progress" stroke="#04AA6D" stroke-width="15" fill="none" stroke-linecap="round" />
     <circle id="thumb" r="12" class="thumb" cx="150" cy="50" />
   </svg>
-  <input type="range" id="loanInput" min="1000" max="10000" step="100" value="5000">
   <div class="value-display" id="valueDisplay">$5,000</div>
 </div>
 
@@ -80,16 +77,20 @@
 </div>
 
 <script>
-  const input = document.getElementById('loanInput');
-  const progress = document.getElementById('progress');
-  const thumb = document.getElementById('thumb');
-  const valueDisplay = document.getElementById('valueDisplay');
-  const monthlyDisplay = document.getElementById('monthlyPayment');
+  const progress = document.getElementById("progress");
+  const thumb = document.getElementById("thumb");
+  const valueDisplay = document.getElementById("valueDisplay");
+  const monthlyPayment = document.getElementById("monthlyPayment");
 
   const center = { x: 150, y: 150 };
   const radius = 100;
-  const interestRate = 0.05; // 5% annual interest
-  const months = 12;
+  const min = 1000;
+  const max = 10000;
+  const step = 100;
+  const termMonths = 12;
+  const annualInterest = 0.05;
+
+  let currentValue = 5000;
 
   function polarToCartesian(cx, cy, r, angleDeg) {
     const angleRad = (angleDeg - 90) * Math.PI / 180;
@@ -108,60 +109,66 @@
             A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
   }
 
-  function formatCurrency(value) {
-    return `$${parseFloat(value).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+  function formatCurrency(val) {
+    return `$${parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
   }
 
-  function updateLoanResult(principal) {
-    const r = interestRate / 12;
-    const n = months;
-    const monthly = (principal * r) / (1 - Math.pow(1 + r, -n));
-    monthlyDisplay.textContent = formatCurrency(monthly);
-  }
-
-  function updateVisuals(value) {
-    const min = +input.min;
-    const max = +input.max;
-    const angle = (value - min) / (max - min) * 360;
-
+  function updateDisplay(val) {
+    const percentage = (val - min) / (max - min);
+    const angle = percentage * 360;
     const pos = polarToCartesian(center.x, center.y, radius, angle);
-    progress.setAttribute('d', describeArc(center.x, center.y, radius, angle));
-    thumb.setAttribute('cx', pos.x);
-    thumb.setAttribute('cy', pos.y);
 
-    valueDisplay.textContent = formatCurrency(value);
-    updateLoanResult(value);
+    // Update arc path
+    progress.setAttribute("d", describeArc(center.x, center.y, radius, angle));
+    // Move thumb
+    thumb.setAttribute("cx", pos.x);
+    thumb.setAttribute("cy", pos.y);
+
+    valueDisplay.textContent = formatCurrency(val);
+    calculatePayment(val);
   }
 
-  input.addEventListener('input', () => updateVisuals(input.value));
+  function calculatePayment(principal) {
+    const r = annualInterest / 12;
+    const n = termMonths;
+    const monthly = (principal * r) / (1 - Math.pow(1 + r, -n));
+    monthlyPayment.textContent = formatCurrency(monthly);
+  }
 
-  // Mouse drag support
+  function angleFromMouse(x, y) {
+    const dx = x - center.x;
+    const dy = y - center.y;
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+    if (angle < 0) angle += 360;
+    return angle;
+  }
+
+  function valueFromAngle(angle) {
+    const percentage = angle / 360;
+    let val = min + percentage * (max - min);
+    val = Math.round(val / step) * step;
+    return Math.min(Math.max(val, min), max);
+  }
+
+  // Mouse interaction
   let dragging = false;
 
-  thumb.addEventListener('mousedown', () => dragging = true);
-  document.addEventListener('mouseup', () => dragging = false);
-  document.addEventListener('mousemove', (e) => {
+  thumb.addEventListener("mousedown", () => dragging = true);
+  document.addEventListener("mouseup", () => dragging = false);
+  document.addEventListener("mousemove", (e) => {
     if (!dragging) return;
+    const rect = progress.closest("svg").getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
-    const rect = input.closest('.circular-container').getBoundingClientRect();
-    const x = e.clientX - rect.left - center.x;
-    const y = e.clientY - rect.top - center.y;
-    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
-    if (angle < 0) angle += 360;
-
-    const min = +input.min;
-    const max = +input.max;
-    const value = min + (angle / 360) * (max - min);
-    const stepped = Math.round(value / input.step) * input.step;
-
-    if (stepped >= min && stepped <= max) {
-      input.value = stepped;
-      updateVisuals(stepped);
-    }
+    const angle = angleFromMouse(mouseX, mouseY);
+    const newVal = valueFromAngle(angle);
+    currentValue = newVal;
+    updateDisplay(currentValue);
   });
 
-  // Initial load
-  updateVisuals(input.value);
+  // Initial render
+  updateDisplay(currentValue);
 </script>
 
 </body>
