@@ -2,78 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Loan Calculator</title>
+  <title>Loan Calculator with Circular Dial</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      font-family: sans-serif;
+      background: #f5f5f5;
       height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .calculator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
+      text-align: center;
       background: white;
       padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
-    .slider-wrapper {
+    .dial {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      margin: 0 auto 1rem;
     }
 
-    input[type="range"].circular-slider {
-      --percent: 50%;
-      appearance: none;
-      width: 100%;
-      height: 100%;
+    .dial .thumb {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #007BFF;
+      border: 3px solid white;
       border-radius: 50%;
-      background: conic-gradient(#007BFF var(--percent), #e0e0e0 0);
-      transform: rotate(-90deg);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
       cursor: pointer;
     }
 
-    input[type="range"].circular-slider::-webkit-slider-thumb {
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #007BFF;
-      border: 2px solid white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-    }
-
-    input[type="range"].circular-slider::-moz-range-thumb {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #007BFF;
-      border: 2px solid white;
+    .dial .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      color: #333;
     }
 
     .output {
-      text-align: center;
+      margin-top: 1rem;
     }
 
-    .output h2 {
-      margin: 0.25rem 0;
-      font-size: 1rem;
-      color: #444;
-    }
-
-    .output .value {
-      font-size: 1.5rem;
+    .value {
+      font-size: 1.3rem;
       font-weight: bold;
       color: #007BFF;
     }
@@ -82,22 +67,25 @@
 <body>
 
   <div class="calculator">
-    <div class="slider-wrapper">
-      <input id="loanSlider" type="range" min="1000" max="10000" step="100" value="5000" class="circular-slider" />
+    <div class="dial" id="dial">
+      <div class="thumb" id="thumb"></div>
+      <div class="center" id="loanValue">$5000</div>
     </div>
-
     <div class="output">
-      <h2>Loan Amount</h2>
-      <div class="value" id="loanAmount">$5000</div>
-      <h2>Monthly Payment</h2>
+      <h3>Monthly Payment</h3>
       <div class="value" id="monthlyPayment">$263.53</div>
     </div>
   </div>
 
   <script>
-    const slider = document.getElementById('loanSlider');
-    const loanAmount = document.getElementById('loanAmount');
+    const dial = document.getElementById('dial');
+    const thumb = document.getElementById('thumb');
+    const loanValue = document.getElementById('loanValue');
     const monthlyPayment = document.getElementById('monthlyPayment');
+
+    const min = 1000;
+    const max = 10000;
+    let value = 5000;
 
     function calculatePayment(amount, rate = 0.05, months = 24) {
       const r = rate / 12;
@@ -105,17 +93,64 @@
       return payment.toFixed(2);
     }
 
-    function updateUI() {
-      const val = +slider.value;
-      const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
-
-      slider.style.setProperty('--percent', `${percent}%`);
-      loanAmount.textContent = `$${val}`;
+    function updateUI(val) {
+      loanValue.textContent = `$${val}`;
       monthlyPayment.textContent = `$${calculatePayment(val)}`;
     }
 
-    slider.addEventListener('input', updateUI);
-    updateUI();
+    function setThumbAngle(angle) {
+      const radius = 90;
+      const x = radius * Math.cos(angle) + 100;
+      const y = radius * Math.sin(angle) + 100;
+      thumb.style.left = `${x}px`;
+      thumb.style.top = `${y}px`;
+    }
+
+    function angleToValue(angle) {
+      const percent = angle / (2 * Math.PI);
+      return Math.round(min + percent * (max - min));
+    }
+
+    function valueToAngle(val) {
+      return ((val - min) / (max - min)) * 2 * Math.PI;
+    }
+
+    function handleDrag(event) {
+      const rect = dial.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const x = (event.touches ? event.touches[0].clientX : event.clientX) - centerX;
+      const y = (event.touches ? event.touches[0].clientY : event.clientY) - centerY;
+      let angle = Math.atan2(y, x);
+      if (angle < 0) angle += 2 * Math.PI;
+
+      value = angleToValue(angle);
+      updateUI(value);
+      setThumbAngle(angle);
+    }
+
+    thumb.addEventListener('mousedown', startDrag);
+    thumb.addEventListener('touchstart', startDrag);
+
+    function startDrag(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', handleDrag);
+      document.addEventListener('touchmove', handleDrag);
+      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener('touchend', stopDrag);
+    }
+
+    function stopDrag() {
+      document.removeEventListener('mousemove', handleDrag);
+      document.removeEventListener('touchmove', handleDrag);
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchend', stopDrag);
+    }
+
+    // Init position
+    const initialAngle = valueToAngle(value);
+    setThumbAngle(initialAngle);
+    updateUI(value);
   </script>
 
 </body>
