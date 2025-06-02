@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Loan Calculator with Circular Channel</title>
+  <title>Loan Calculator Circular</title>
   <style>
     body {
       font-family: sans-serif;
@@ -40,14 +40,14 @@
       position: absolute;
       top: 0;
       left: 0;
-      mask-image: radial-gradient(circle at center, transparent 70px, black 71px);
-      -webkit-mask-image: radial-gradient(circle at center, transparent 70px, black 71px);
+      mask-image: radial-gradient(circle at center, transparent 85px, black 86px);
+      -webkit-mask-image: radial-gradient(circle at center, transparent 85px, black 86px);
     }
 
     .thumb {
       position: absolute;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       background: #007BFF;
       border: 3px solid white;
       border-radius: 50%;
@@ -117,13 +117,12 @@
     }
 
     function setThumbAngle(angle) {
-      const dialSize = 220;
-      const thumbSize = 28;
-      const ringThickness = 20; // visual thickness
-      const radius = (dialSize / 2) - (ringThickness / 2);
-      const center = dialSize / 2;
-      const x = center + radius * Math.cos(angle);
-      const y = center + radius * Math.sin(angle);
+      const radius = 100; // center of dial
+      const offset = 50;  // adjust to align with visible track ring
+      const r = radius - offset;
+      const center = radius;
+      const x = center + r * Math.cos(angle);
+      const y = center + r * Math.sin(angle);
       thumb.style.left = `${x}px`;
       thumb.style.top = `${y}px`;
     }
@@ -169,7 +168,7 @@
     thumb.addEventListener('mousedown', startDrag);
     thumb.addEventListener('touchstart', startDrag);
 
-    // Init position
+    // Init
     const initialAngle = valueToAngle(value);
     setThumbAngle(initialAngle);
     updateUI(value, initialAngle);
