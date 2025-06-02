@@ -2,39 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Circular Range Slider</title>
+  <title>Circular Slider with Thumb</title>
   <style>
     body {
-      font-family: sans-serif;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       background: #f0f0f0;
+      font-family: sans-serif;
     }
 
-    .circle-slider {
+    .circular-slider {
       position: relative;
-      width: 200px;
-      height: 200px;
+      width: 300px;
+      height: 300px;
     }
 
-    .circle-slider svg {
-      transform: rotate(-90deg);
-    }
-
-    .circle-slider input[type="range"] {
-      position: absolute;
-      top: 0;
-      left: 0;
+    svg {
       width: 100%;
       height: 100%;
-      opacity: 0;
-      z-index: 2;
-      cursor: pointer;
     }
 
-    .value {
+    .value-display {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -42,37 +32,80 @@
       font-size: 24px;
       font-weight: bold;
     }
+
+    .thumb {
+      fill: #04AA6D;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-<div class="circle-slider">
-  <svg width="200" height="200">
-    <circle cx="100" cy="100" r="90" stroke="#ddd" stroke-width="15" fill="none" />
-    <circle id="progress" cx="100" cy="100" r="90" stroke="#04AA6D" stroke-width="15" fill="none"
-            stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="282.74" />
+<div class="circular-slider">
+  <svg viewBox="0 0 300 300">
+    <circle cx="150" cy="150" r="100" stroke="#ddd" stroke-width="15" fill="none" />
+    <path id="progress" stroke="#04AA6D" stroke-width="15" fill="none"
+          stroke-linecap="round" />
+    <circle id="thumb" class="thumb" r="12" cx="150" cy="50" />
   </svg>
-  <input type="range" min="0" max="100" value="50" id="rangeInput" />
-  <div class="value" id="rangeValue">50</div>
+  <div class="value-display" id="valueDisplay">0</div>
 </div>
 
 <script>
-  const rangeInput = document.getElementById('rangeInput');
+  const thumb = document.getElementById('thumb');
   const progress = document.getElementById('progress');
-  const rangeValue = document.getElementById('rangeValue');
-  const circumference = 2 * Math.PI * 90;
+  const display = document.getElementById('valueDisplay');
 
-  function updateCircle(value) {
-    const offset = circumference - (value / 100) * circumference;
-    progress.style.strokeDashoffset = offset;
-    rangeValue.textContent = value;
+  const center = { x: 150, y: 150 };
+  const radius = 100;
+
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    const angleRad = (angleDeg - 90) * Math.PI / 180;
+    return {
+      x: cx + r * Math.cos(angleRad),
+      y: cy + r * Math.sin(angleRad)
+    };
   }
 
-  rangeInput.addEventListener('input', () => {
-    updateCircle(rangeInput.value);
-  });
+  function describeArc(cx, cy, r, endAngle) {
+    const start = polarToCartesian(cx, cy, r, 0);
+    const end = polarToCartesian(cx, cy, r, endAngle);
+    const largeArc = endAngle > 180 ? 1 : 0;
 
-  updateCircle(rangeInput.value);
+    return `M ${start.x} ${start.y}
+            A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
+  }
+
+  function updateSlider(angle) {
+    const value = Math.round(angle / 360 * 100);
+    display.textContent = value;
+    const coords = polarToCartesian(center.x, center.y, radius, angle);
+    thumb.setAttribute('cx', coords.x);
+    thumb.setAttribute('cy', coords.y);
+    progress.setAttribute('d', describeArc(center.x, center.y, radius, angle));
+  }
+
+  function getAngle(e) {
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left - center.x;
+    const y = e.clientY - rect.top - center.y;
+    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+    if (angle < 0) angle += 360;
+    return angle;
+  }
+
+  function onMouseMove(e) {
+    const angle = getAngle(e);
+    updateSlider(angle);
+  }
+
+  let dragging = false;
+
+  thumb.addEventListener('mousedown', () => dragging = true);
+  document.addEventListener('mouseup', () => dragging = false);
+  document.addEventListener('mousemove', e => {
+    if (dragging) onMouseMove(e);
+  });
 </script>
 
 </body>
