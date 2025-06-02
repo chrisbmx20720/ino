@@ -112,6 +112,13 @@
     return `$${parseFloat(value).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
   }
 
+  function updateLoanResult(principal) {
+    const r = interestRate / 12;
+    const n = months;
+    const monthly = (principal * r) / (1 - Math.pow(1 + r, -n));
+    monthlyDisplay.textContent = formatCurrency(monthly);
+  }
+
   function updateVisuals(value) {
     const min = +input.min;
     const max = +input.max;
@@ -126,21 +133,16 @@
     updateLoanResult(value);
   }
 
-  function updateLoanResult(principal) {
-    const r = interestRate / 12;
-    const n = months;
-    const monthly = (principal * r) / (1 - Math.pow(1 + r, -n));
-    monthlyDisplay.textContent = formatCurrency(monthly);
-  }
-
   input.addEventListener('input', () => updateVisuals(input.value));
 
-  // Mouse drag logic
+  // Mouse drag support
   let dragging = false;
+
   thumb.addEventListener('mousedown', () => dragging = true);
   document.addEventListener('mouseup', () => dragging = false);
-  document.addEventListener('mousemove', e => {
+  document.addEventListener('mousemove', (e) => {
     if (!dragging) return;
+
     const rect = input.closest('.circular-container').getBoundingClientRect();
     const x = e.clientX - rect.left - center.x;
     const y = e.clientY - rect.top - center.y;
@@ -149,13 +151,16 @@
 
     const min = +input.min;
     const max = +input.max;
-    const raw = min + (angle / 360) * (max - min);
-    const stepped = Math.round(raw / input.step) * input.step;
-    input.value = stepped;
-    updateVisuals(stepped);
+    const value = min + (angle / 360) * (max - min);
+    const stepped = Math.round(value / input.step) * input.step;
+
+    if (stepped >= min && stepped <= max) {
+      input.value = stepped;
+      updateVisuals(stepped);
+    }
   });
 
-  // Init
+  // Initial load
   updateVisuals(input.value);
 </script>
 
