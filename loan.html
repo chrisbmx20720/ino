@@ -2,108 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loan Calculator with CSS Circular Range Slider</title>
+  <title>Loan Calculator with RoundSlider</title>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- roundSlider CSS & JS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/round-slider@1.6.1/dist/roundslider.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/round-slider@1.6.1/dist/roundslider.min.js"></script>
+
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       background: #f5f5f5;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      padding: 2rem;
+      text-align: center;
     }
 
-    .circular-wrapper {
-      position: relative;
-      width: 200px;
-      height: 200px;
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
     }
 
-    .c-rng {
-      --rng-percent: 50%;
-      appearance: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      transform: rotate(-90deg);
-      background: conic-gradient(#0960A5 var(--rng-percent), #ccc 0);
-      cursor: pointer;
-    }
-
-    .c-rng::-webkit-slider-thumb {
-      appearance: none;
-      background: #0960A5;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      border: none;
-    }
-
-    .c-rng::-moz-range-thumb {
-      background: #0960A5;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      border: none;
+    .roundslider {
+      width: 250px;
+      height: 250px;
     }
 
     .value-display {
       margin-top: 20px;
-      text-align: center;
+      font-size: 1.2rem;
     }
 
-    .value-display h2 {
-      margin: 0.5rem 0;
-    }
-
-    .value {
-      font-size: 1.5rem;
+    .bold {
       font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <div class="circular-wrapper">
-    <input id="circularRange" type="range" class="c-rng" min="1000" max="10000" value="5000" step="100" />
-  </div>
-
+  <h2>Loan Calculator</h2>
+  <div id="loanSlider" class="roundslider"></div>
   <div class="value-display">
-    <h2>Loan Amount</h2>
-    <div class="value" id="loanAmount">$5000</div>
-    <h2>Monthly Payment</h2>
-    <div class="value" id="monthlyPayment">$263.53</div>
+    Loan Amount: <span class="bold" id="loanAmount">$5000</span><br>
+    Estimated Monthly Payment: <span class="bold" id="monthlyPayment">$250</span>
   </div>
 
   <script>
-    const slider = document.getElementById('circularRange');
-    const amountDisplay = document.getElementById('loanAmount');
-    const paymentDisplay = document.getElementById('monthlyPayment');
-
-    function calculatePayment(amount, rate = 0.05, months = 24) {
-      const r = rate / 12;
-      const payment = (amount * r) / (1 - Math.pow(1 + r, -months));
-      return payment.toFixed(2);
+    function calculateMonthlyPayment(amount, interestRate = 0.05, termMonths = 24) {
+      // Simple monthly payment formula
+      const monthlyRate = interestRate / 12;
+      return ((amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -termMonths))).toFixed(2);
     }
 
-    function updateSlider() {
-      const val = +slider.value;
-      const min = +slider.min;
-      const max = +slider.max;
-      const percent = ((val - min) / (max - min)) * 100;
+    $(function () {
+      const minAmount = 1000;
+      const maxAmount = 10000;
+      const defaultAmount = 5000;
 
-      slider.style.setProperty('--rng-percent', `${percent}%`);
-      amountDisplay.textContent = `$${val}`;
-      paymentDisplay.textContent = `$${calculatePayment(val)}`;
-    }
+      $("#loanSlider").roundSlider({
+        sliderType: "min-range",
+        value: defaultAmount,
+        min: minAmount,
+        max: maxAmount,
+        radius: 120,
+        width: 16,
+        handleSize: "+8",
+        circleShape: "pie",
+        startAngle: 315,
+        editableTooltip: false,
+        tooltipFormat: function (args) {
+          return "$" + args.value;
+        },
+        change: updateLoanInfo,
+        drag: updateLoanInfo
+      });
 
-    slider.addEventListener('input', updateSlider);
-    updateSlider(); // Initial call
+      function updateLoanInfo(e) {
+        const amount = e.value;
+        const monthly = calculateMonthlyPayment(amount);
+        $("#loanAmount").text(`$${amount}`);
+        $("#monthlyPayment").text(`$${monthly}`);
+      }
+
+      // Set initial values
+      const initialPayment = calculateMonthlyPayment(defaultAmount);
+      $("#monthlyPayment").text(`$${initialPayment}`);
+    });
   </script>
 
 </body>
