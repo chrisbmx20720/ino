@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Loan Calculator with Circular Dial</title>
+  <title>Loan Calculator with Circular Channel</title>
   <style>
     body {
       font-family: sans-serif;
@@ -24,17 +24,30 @@
 
     .dial {
       position: relative;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: #e0e0e0;
+      width: 220px;
+      height: 220px;
       margin: 0 auto 1rem;
     }
 
-    .dial .thumb {
+    .track {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #007BFF var(--angle, 50deg),
+        #e0e0e0 var(--angle, 50deg)
+      );
       position: absolute;
-      width: 30px;
-      height: 30px;
+      top: 0;
+      left: 0;
+      mask-image: radial-gradient(circle at center, transparent 60px, black 61px);
+      -webkit-mask-image: radial-gradient(circle at center, transparent 60px, black 61px);
+    }
+
+    .thumb {
+      position: absolute;
+      width: 28px;
+      height: 28px;
       background: #007BFF;
       border: 3px solid white;
       border-radius: 50%;
@@ -42,15 +55,19 @@
       left: 50%;
       transform: translate(-50%, -100%);
       cursor: pointer;
+      z-index: 2;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    .dial .center {
+    .center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-weight: bold;
       color: #333;
+      font-size: 1.1rem;
+      z-index: 1;
     }
 
     .output {
@@ -58,7 +75,7 @@
     }
 
     .value {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: bold;
       color: #007BFF;
     }
@@ -68,6 +85,7 @@
 
   <div class="calculator">
     <div class="dial" id="dial">
+      <div class="track" id="track"></div>
       <div class="thumb" id="thumb"></div>
       <div class="center" id="loanValue">$5000</div>
     </div>
@@ -80,6 +98,7 @@
   <script>
     const dial = document.getElementById('dial');
     const thumb = document.getElementById('thumb');
+    const track = document.getElementById('track');
     const loanValue = document.getElementById('loanValue');
     const monthlyPayment = document.getElementById('monthlyPayment');
 
@@ -93,15 +112,16 @@
       return payment.toFixed(2);
     }
 
-    function updateUI(val) {
+    function updateUI(val, angle) {
       loanValue.textContent = `$${val}`;
       monthlyPayment.textContent = `$${calculatePayment(val)}`;
+      track.style.setProperty('--angle', `${(angle * 180 / Math.PI)}deg`);
     }
 
     function setThumbAngle(angle) {
       const radius = 90;
-      const x = radius * Math.cos(angle) + 100;
-      const y = radius * Math.sin(angle) + 100;
+      const x = radius * Math.cos(angle) + 110;
+      const y = radius * Math.sin(angle) + 110;
       thumb.style.left = `${x}px`;
       thumb.style.top = `${y}px`;
     }
@@ -125,12 +145,9 @@
       if (angle < 0) angle += 2 * Math.PI;
 
       value = angleToValue(angle);
-      updateUI(value);
+      updateUI(value, angle);
       setThumbAngle(angle);
     }
-
-    thumb.addEventListener('mousedown', startDrag);
-    thumb.addEventListener('touchstart', startDrag);
 
     function startDrag(e) {
       e.preventDefault();
@@ -147,10 +164,13 @@
       document.removeEventListener('touchend', stopDrag);
     }
 
+    thumb.addEventListener('mousedown', startDrag);
+    thumb.addEventListener('touchstart', startDrag);
+
     // Init position
     const initialAngle = valueToAngle(value);
     setThumbAngle(initialAngle);
-    updateUI(value);
+    updateUI(value, initialAngle);
   </script>
 
 </body>
