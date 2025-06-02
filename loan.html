@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Loan Calculator - Circular Slider</title>
+  <meta charset="UTF-8" />
+  <title>Loan Calculator with Circular Dial</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f4f8;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background: #f5f5f5;
       height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .calculator {
+      text-align: center;
       background: white;
       padding: 2rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
     .dial {
       position: relative;
-      width: 250px;
-      height: 250px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
-      background: conic-gradient(#007bff 0% 50%, #ccc 50% 100%);
+      background: #e0e0e0;
       margin: 0 auto 1rem;
     }
 
-    .thumb {
+    .dial .thumb {
       position: absolute;
       width: 30px;
       height: 30px;
-      background: #007bff;
+      background: #007BFF;
       border: 3px solid white;
       border-radius: 50%;
       top: 50%;
@@ -44,24 +44,23 @@
       cursor: pointer;
     }
 
-    .center-value {
+    .dial .center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.2rem;
       font-weight: bold;
+      color: #333;
     }
 
-    .result {
+    .output {
       margin-top: 1rem;
-      font-size: 1.1rem;
     }
 
     .value {
+      font-size: 1.3rem;
       font-weight: bold;
-      font-size: 1.5rem;
-      color: #007bff;
+      color: #007BFF;
     }
   </style>
 </head>
@@ -70,74 +69,88 @@
   <div class="calculator">
     <div class="dial" id="dial">
       <div class="thumb" id="thumb"></div>
-      <div class="center-value" id="loanAmount">$5000</div>
+      <div class="center" id="loanValue">$5000</div>
     </div>
-    <div class="result">
-      Monthly Payment: <span class="value" id="monthlyPayment">$219.36</span>
+    <div class="output">
+      <h3>Monthly Payment</h3>
+      <div class="value" id="monthlyPayment">$263.53</div>
     </div>
   </div>
 
   <script>
     const dial = document.getElementById('dial');
     const thumb = document.getElementById('thumb');
-    const loanAmountDisplay = document.getElementById('loanAmount');
-    const monthlyPaymentDisplay = document.getElementById('monthlyPayment');
+    const loanValue = document.getElementById('loanValue');
+    const monthlyPayment = document.getElementById('monthlyPayment');
 
-    const radius = 100;
-    const minLoan = 1000;
-    const maxLoan = 10000;
+    const min = 1000;
+    const max = 10000;
+    let value = 5000;
 
-    let dragging = false;
-
-    function angleFromEvent(e) {
-      const rect = dial.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - (rect.left + rect.width / 2);
-      const y = (e.touches ? e.touches[0].clientY : e.clientY) - (rect.top + rect.height / 2);
-      return Math.atan2(y, x);
-    }
-
-    function angleToValue(angle) {
-      if (angle < 0) angle += 2 * Math.PI;
-      const percent = angle / (2 * Math.PI);
-      return Math.round(minLoan + percent * (maxLoan - minLoan));
-    }
-
-    function updateThumb(angle) {
-      const x = radius * Math.cos(angle) + 125;
-      const y = radius * Math.sin(angle) + 125;
-      thumb.style.left = `${x}px`;
-      thumb.style.top = `${y}px`;
-
-      const loan = angleToValue(angle);
-      loanAmountDisplay.textContent = `$${loan}`;
-
-      const monthly = calculatePayment(loan, 0.05, 24);
-      monthlyPaymentDisplay.textContent = `$${monthly}`;
-    }
-
-    function calculatePayment(principal, rate, months) {
+    function calculatePayment(amount, rate = 0.05, months = 24) {
       const r = rate / 12;
-      const payment = (principal * r) / (1 - Math.pow(1 + r, -months));
+      const payment = (amount * r) / (1 - Math.pow(1 + r, -months));
       return payment.toFixed(2);
     }
 
-    function onDrag(e) {
-      if (!dragging) return;
-      e.preventDefault();
-      const angle = angleFromEvent(e);
-      updateThumb(angle);
+    function updateUI(val) {
+      loanValue.textContent = `$${val}`;
+      monthlyPayment.textContent = `$${calculatePayment(val)}`;
     }
 
-    thumb.addEventListener('mousedown', () => dragging = true);
-    document.addEventListener('mouseup', () => dragging = false);
-    document.addEventListener('mousemove', onDrag);
+    function setThumbAngle(angle) {
+      const radius = 90;
+      const x = radius * Math.cos(angle) + 100;
+      const y = radius * Math.sin(angle) + 100;
+      thumb.style.left = `${x}px`;
+      thumb.style.top = `${y}px`;
+    }
 
-    thumb.addEventListener('touchstart', () => dragging = true);
-    document.addEventListener('touchend', () => dragging = false);
-    document.addEventListener('touchmove', onDrag);
+    function angleToValue(angle) {
+      const percent = angle / (2 * Math.PI);
+      return Math.round(min + percent * (max - min));
+    }
 
-    // Initialize
-    updateThumb(1.5 * Math.PI); // Default position
+    function valueToAngle(val) {
+      return ((val - min) / (max - min)) * 2 * Math.PI;
+    }
+
+    function handleDrag(event) {
+      const rect = dial.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const x = (event.touches ? event.touches[0].clientX : event.clientX) - centerX;
+      const y = (event.touches ? event.touches[0].clientY : event.clientY) - centerY;
+      let angle = Math.atan2(y, x);
+      if (angle < 0) angle += 2 * Math.PI;
+
+      value = angleToValue(angle);
+      updateUI(value);
+      setThumbAngle(angle);
+    }
+
+    thumb.addEventListener('mousedown', startDrag);
+    thumb.addEventListener('touchstart', startDrag);
+
+    function startDrag(e) {
+      e.preventDefault();
+      document.addEventListener('mousemove', handleDrag);
+      document.addEventListener('touchmove', handleDrag);
+      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener('touchend', stopDrag);
+    }
+
+    function stopDrag() {
+      document.removeEventListener('mousemove', handleDrag);
+      document.removeEventListener('touchmove', handleDrag);
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchend', stopDrag);
+    }
+
+    // Init position
+    const initialAngle = valueToAngle(value);
+    setThumbAngle(initialAngle);
+    updateUI(value);
   </script>
 
 </body>
