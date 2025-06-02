@@ -2,67 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CSS Circular Range Slider Loan Calculator</title>
+  <title>Loan Calculator with CSS Circular Range Slider</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f2f5;
+      background: #f5f5f5;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      padding: 2rem;
     }
 
-    .slider-container {
+    .circular-wrapper {
       position: relative;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      background: conic-gradient(#0960A5 calc(var(--value, 0) * 1%), #ddd 0%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
+      width: 200px;
+      height: 200px;
     }
 
-    .slider-container input[type="range"] {
+    .c-rng {
+      --rng-percent: 50%;
+      appearance: none;
       position: absolute;
-      width: 250px;
-      height: 250px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
       transform: rotate(-90deg);
-      appearance: none;
-      background: transparent;
+      background: conic-gradient(#0960A5 var(--rng-percent), #ccc 0);
+      cursor: pointer;
     }
 
-    input[type="range"]::-webkit-slider-thumb {
+    .c-rng::-webkit-slider-thumb {
       appearance: none;
       background: #0960A5;
       border-radius: 50%;
       width: 20px;
       height: 20px;
-      cursor: pointer;
-      box-shadow: 0 0 0 4px white;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      background: #0960A5;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
       border: none;
     }
 
-    .value-labels {
+    .c-rng::-moz-range-thumb {
+      background: #0960A5;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      border: none;
+    }
+
+    .value-display {
+      margin-top: 20px;
       text-align: center;
     }
 
-    .value-labels h2 {
-      margin: 10px 0 5px;
+    .value-display h2 {
+      margin: 0.5rem 0;
     }
 
-    .value-labels .value {
+    .value {
       font-size: 1.5rem;
       font-weight: bold;
     }
@@ -70,11 +69,11 @@
 </head>
 <body>
 
-  <div class="slider-container" id="sliderContainer" style="--value:50;">
-    <input id="loanRange" type="range" min="1000" max="10000" value="5000" step="100" />
+  <div class="circular-wrapper">
+    <input id="circularRange" type="range" class="c-rng" min="1000" max="10000" value="5000" step="100" />
   </div>
 
-  <div class="value-labels">
+  <div class="value-display">
     <h2>Loan Amount</h2>
     <div class="value" id="loanAmount">$5000</div>
     <h2>Monthly Payment</h2>
@@ -82,29 +81,29 @@
   </div>
 
   <script>
-    const loanSlider = document.getElementById('loanRange');
-    const sliderContainer = document.getElementById('sliderContainer');
-    const loanAmount = document.getElementById('loanAmount');
-    const monthlyPayment = document.getElementById('monthlyPayment');
+    const slider = document.getElementById('circularRange');
+    const amountDisplay = document.getElementById('loanAmount');
+    const paymentDisplay = document.getElementById('monthlyPayment');
 
-    function calculateMonthly(amount, rate = 0.05, months = 24) {
-      const monthlyRate = rate / 12;
-      return ((amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months))).toFixed(2);
+    function calculatePayment(amount, rate = 0.05, months = 24) {
+      const r = rate / 12;
+      const payment = (amount * r) / (1 - Math.pow(1 + r, -months));
+      return payment.toFixed(2);
     }
 
-    function updateUI() {
-      const value = +loanSlider.value;
-      const percent = ((value - loanSlider.min) / (loanSlider.max - loanSlider.min)) * 100;
+    function updateSlider() {
+      const val = +slider.value;
+      const min = +slider.min;
+      const max = +slider.max;
+      const percent = ((val - min) / (max - min)) * 100;
 
-      sliderContainer.style.setProperty('--value', percent);
-      loanAmount.textContent = `$${value}`;
-      monthlyPayment.textContent = `$${calculateMonthly(value)}`;
+      slider.style.setProperty('--rng-percent', `${percent}%`);
+      amountDisplay.textContent = `$${val}`;
+      paymentDisplay.textContent = `$${calculatePayment(val)}`;
     }
 
-    loanSlider.addEventListener('input', updateUI);
-
-    // Initial setup
-    updateUI();
+    slider.addEventListener('input', updateSlider);
+    updateSlider(); // Initial call
   </script>
 
 </body>
