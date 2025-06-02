@@ -113,15 +113,15 @@
     function updateUI(val, angle) {
       loanValue.textContent = `$${val}`;
       monthlyPayment.textContent = `$${calculatePayment(val)}`;
-      const deg = angle * (180 / Math.PI);
+      const deg = (angle * (180 / Math.PI) + 360) % 360;
       track.style.setProperty('--angle', `${deg}deg`);
       setThumbPosition(angle);
     }
 
     function setThumbPosition(angle) {
-      const radius = 100; // dial is 220px, so center = 110
+      const radius = 100;
       const trackWidth = 15;
-      const r = radius - trackWidth; // bring thumb to edge of track
+      const r = radius - trackWidth;
       const x = radius + r * Math.cos(angle);
       const y = radius + r * Math.sin(angle);
       thumb.style.left = `${x}px`;
@@ -129,8 +129,9 @@
     }
 
     function angleToValue(angle) {
-      const percent = angle / (2 * Math.PI);
-      return Math.round(min + percent * (max - min));
+      // adjust so 0 is at top
+      angle = (angle + 2 * Math.PI) % (2 * Math.PI);
+      return Math.round(min + (angle / (2 * Math.PI)) * (max - min));
     }
 
     function valueToAngle(val) {
@@ -143,7 +144,8 @@
       const centerY = rect.top + rect.height / 2;
       const x = (event.touches ? event.touches[0].clientX : event.clientX) - centerX;
       const y = (event.touches ? event.touches[0].clientY : event.clientY) - centerY;
-      let angle = Math.atan2(y, x);
+
+      let angle = Math.atan2(y, x) - Math.PI / 2;
       if (angle < 0) angle += 2 * Math.PI;
 
       value = angleToValue(angle);
@@ -168,8 +170,8 @@
     thumb.addEventListener('mousedown', startDrag);
     thumb.addEventListener('touchstart', startDrag);
 
-    // Initialize
-    const initialAngle = valueToAngle(value);
+    // Initialize at 0 deg (top)
+    const initialAngle = valueToAngle(value) - Math.PI / 2;
     updateUI(value, initialAngle);
   </script>
 
