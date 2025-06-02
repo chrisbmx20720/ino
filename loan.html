@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Circular Slider with Thumb</title>
+  <title>Circular Range Slider</title>
   <style>
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #f0f0f0;
       font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
     }
 
-    .circular-slider {
+    .circular-container {
       position: relative;
       width: 300px;
       height: 300px;
@@ -22,6 +22,7 @@
     svg {
       width: 100%;
       height: 100%;
+      transform: rotate(-90deg); /* Start from top */
     }
 
     .value-display {
@@ -37,23 +38,30 @@
       fill: #04AA6D;
       cursor: pointer;
     }
+
+    input[type="range"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
 
-<div class="circular-slider">
+<div class="circular-container">
   <svg viewBox="0 0 300 300">
     <circle cx="150" cy="150" r="100" stroke="#ddd" stroke-width="15" fill="none" />
-    <path id="progress" stroke="#04AA6D" stroke-width="15" fill="none"
-          stroke-linecap="round" />
-    <circle id="thumb" class="thumb" r="12" cx="150" cy="50" />
+    <path id="progress" stroke="#04AA6D" stroke-width="15" fill="none" stroke-linecap="round" />
+    <circle id="thumb" r="12" class="thumb" cx="150" cy="50" />
   </svg>
-  <div class="value-display" id="valueDisplay">0</div>
+  <input type="range" id="rangeInput" min="0" max="100" step="1" value="25">
+  <div class="value-display" id="valueDisplay">25</div>
 </div>
 
 <script>
-  const thumb = document.getElementById('thumb');
+  const rangeInput = document.getElementById('rangeInput');
   const progress = document.getElementById('progress');
+  const thumb = document.getElementById('thumb');
   const display = document.getElementById('valueDisplay');
 
   const center = { x: 150, y: 150 };
@@ -70,42 +78,47 @@
   function describeArc(cx, cy, r, endAngle) {
     const start = polarToCartesian(cx, cy, r, 0);
     const end = polarToCartesian(cx, cy, r, endAngle);
-    const largeArc = endAngle > 180 ? 1 : 0;
+    const largeArcFlag = endAngle > 180 ? 1 : 0;
 
     return `M ${start.x} ${start.y}
-            A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
+            A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
   }
 
-  function updateSlider(angle) {
-    const value = Math.round(angle / 360 * 100);
-    display.textContent = value;
-    const coords = polarToCartesian(center.x, center.y, radius, angle);
-    thumb.setAttribute('cx', coords.x);
-    thumb.setAttribute('cy', coords.y);
+  function updateVisuals(value) {
+    const max = +rangeInput.max;
+    const angle = value / max * 360;
+    const thumbPos = polarToCartesian(center.x, center.y, radius, angle);
     progress.setAttribute('d', describeArc(center.x, center.y, radius, angle));
+    thumb.setAttribute('cx', thumbPos.x);
+    thumb.setAttribute('cy', thumbPos.y);
+    display.textContent = value;
   }
 
-  function getAngle(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left - center.x;
-    const y = e.clientY - rect.top - center.y;
-    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
-    if (angle < 0) angle += 360;
-    return angle;
-  }
+  // Sync visuals on input
+  rangeInput.addEventListener('input', () => {
+    updateVisuals(rangeInput.value);
+  });
 
-  function onMouseMove(e) {
-    const angle = getAngle(e);
-    updateSlider(angle);
-  }
-
+  // Allow drag to update input
   let dragging = false;
 
   thumb.addEventListener('mousedown', () => dragging = true);
   document.addEventListener('mouseup', () => dragging = false);
   document.addEventListener('mousemove', e => {
-    if (dragging) onMouseMove(e);
+    if (!dragging) return;
+    const rect = e.target.closest('svg').getBoundingClientRect();
+    const x = e.clientX - rect.left - center.x;
+    const y = e.clientY - rect.top - center.y;
+    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+    if (angle < 0) angle += 360;
+    const max = +rangeInput.max;
+    const value = Math.round(angle / 360 * max);
+    rangeInput.value = value;
+    updateVisuals(value);
   });
+
+  // Initial draw
+  updateVisuals(rangeInput.value);
 </script>
 
 </body>
