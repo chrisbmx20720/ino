@@ -34,8 +34,8 @@
       height: 100%;
       border-radius: 50%;
       background: conic-gradient(
-        #007BFF var(--angle, 50deg),
-        #e0e0e0 var(--angle, 50deg)
+        #007BFF var(--angle, 0deg),
+        #e0e0e0 var(--angle, 0deg)
       );
       position: absolute;
       top: 0;
@@ -113,16 +113,17 @@
     function updateUI(val, angle) {
       loanValue.textContent = `$${val}`;
       monthlyPayment.textContent = `$${calculatePayment(val)}`;
-      track.style.setProperty('--angle', `${(angle * 180 / Math.PI)}deg`);
+      const deg = angle * (180 / Math.PI);
+      track.style.setProperty('--angle', `${deg}deg`);
+      setThumbPosition(angle);
     }
 
-    function setThumbAngle(angle) {
-      const radius = 100; // center of dial
-      const offset = 50;  // adjust to align with visible track ring
-      const r = radius - offset;
-      const center = radius;
-      const x = center + r * Math.cos(angle);
-      const y = center + r * Math.sin(angle);
+    function setThumbPosition(angle) {
+      const radius = 100; // dial is 220px, so center = 110
+      const trackWidth = 15;
+      const r = radius - trackWidth; // bring thumb to edge of track
+      const x = radius + r * Math.cos(angle);
+      const y = radius + r * Math.sin(angle);
       thumb.style.left = `${x}px`;
       thumb.style.top = `${y}px`;
     }
@@ -147,7 +148,6 @@
 
       value = angleToValue(angle);
       updateUI(value, angle);
-      setThumbAngle(angle);
     }
 
     function startDrag(e) {
@@ -168,9 +168,8 @@
     thumb.addEventListener('mousedown', startDrag);
     thumb.addEventListener('touchstart', startDrag);
 
-    // Init
+    // Initialize
     const initialAngle = valueToAngle(value);
-    setThumbAngle(initialAngle);
     updateUI(value, initialAngle);
   </script>
 
